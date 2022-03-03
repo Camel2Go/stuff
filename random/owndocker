@@ -1,0 +1,68 @@
+#!/bin/sh
+
+name=""
+
+dockerfile () {
+    echo "creating dockerfile..."
+    cat >./Dockerfile << ENDOFFILE
+# Set docker image
+FROM ubuntu:latest
+
+# set workdir
+WORKDIR /workdir
+
+# fix Configuring tzdata
+ENV DEBIAN_FRONTEND=noninteractive
+ENDOFFILE
+}
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    echo '  Usage: ./owndocker [-nb]'
+    echo '  h  --help          |print help'
+    echo '  f  --file          |create dockerfile for customization'
+    echo '  n  --name          |set name of image/container'
+    echo '  b  --build         |build image'
+    echo '  rm  --remove       |delete image'
+    echo '  default            |run container'
+    exit 0
+fi
+
+# create dockerfile if requested
+if [ "$1" = "f" ] || [ "$1" = "--file" ]
+then 
+    dockerfile
+    exit 0
+fi
+
+# remove container if requested
+if [ "$1" = "rm" ] || [ "$1" = "--remove" ];
+then
+    echo "deleting..."
+    docker image rm $name:latest
+    exit 0
+fi
+
+# set name for container if not set
+if [ -z $name ] || [ "$1" = "n" ] || [ "$1" = "--name" ]
+then
+    echo -n "name of container: "
+    read name
+    sed -i "s/^name=".*"/name=\"$name\"/" $0
+fi
+
+# create dockerfile if not present
+if [ ! -f Dockerfile ]
+then 
+    dockerfile
+fi
+
+
+# build container if not build before
+if [ -z "$(docker images -q $name)" ] || [ "$1" = "b" ] || [ "$1" = "--build" ]
+then
+    echo "building..."
+    docker build -t $name .
+fi
+
+echo "attaching..."
+docker run --rm -it -v $PWD:/workdir --name $name $name bash

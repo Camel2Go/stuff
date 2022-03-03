@@ -1,0 +1,84 @@
+======= Extensions =========
+sudo apt install gnome-tweak-tool
+https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
+https://extensions.gnome.org/extension/779/clipboard-indicator/
+https://extensions.gnome.org/extension/442/drop-down-terminal/
+https://extensions.gnome.org/extension/7/removable-drive-menu/
+https://extensions.gnome.org/extension/906/sound-output-device-chooser/
+https://extensions.gnome.org/extension/1238/time/
+<> extension.js
+const Tweener = imports.ui.tweener; -> const Tweener = imports.tweener.tweener;
+https://extensions.gnome.org/extension/1460/vitals/
+
+
+
+======== MadCatz R.A.T.TE ========
+<> /etc/X11/xorg.conf.d/50-vmmouse.conf
+Section "InputClass"
+   Identifier     "Mouse Remap"
+   MatchProduct   "Mad Catz Mad Catz R.A.T.TE"
+   MatchDevicePath "/dev/input/event*"
+   Option         "ButtonMapping" " 1 2 3 4 5 6 7 8 9 10 11 12 0 0 0"
+   Option        "ZAxisMapping" "4 5 6 7"
+EndSection
+
+======== Keyring-Promt =======
+rm .local/share/keyrings/login.keyring
+
+======== Fileserver ========
+sudo mkdir /media/camel2go/NAS
+<> /etc/fstab
+//192.168.166.2/NAS /media/camel2go/NAS cifs username=server,password=fileserver,noauto,user 0 0
+//192.168.178.1/gut-netz/Intenso /media/camel2go/NAS cifs username=NAS,password=fileserver,noserverino,noauto,user 0 0
+
+
+======== Grub Dual Boot ========
+<> /etc/default/grub
+GRUB_TIMEOUT=0.0
+GRUB_DISABLE_OS_PROBER=true
+
+sudo update-grub
+
+
+======== Scanner ========
+<> /etc/sane.d/net.conf
+# localhost
+192.168.166.2
+
+======== TI-Nspire CX CAS ========
+https://tiplanet.org/modules/archives/download.php?id=2056703
+
+<> ~/.wine/drive_c/.windows-serial
+-> UUID of Root-Partition
+
+<> ~/.local/share/applications/wine/Programs/TI-Nspire\ CX\ CAS\ Student\ Software/TI-Nspire\ CX\ CAS\ Student\ Software.desktop
+Exec=MESA_GL_VERSION_OVERRIDE=4.5 env WINEPREFIX=...
+
+
+======== WOL =======
+ifconfig -> get INTERFACE
+<> /etc/systemd/system/wol.service
+[Unit]
+Description=Configure Wake-up on LAN
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/ethtool -s INTERFACE wol g
+
+[Install]
+WantedBy=basic.target
+
+systemctl daemon-reload
+systemctl enable wol.service
+sudo ethtool INTERFACE
+
+
+======== Packages ========
+sudo apt install ubuntu-restricted-extras
+sudo apt install libdvd-pkg && sudo dpkg-reconfigure libdvd-pkg
+sudo apt install libreoffice-math libreoffice-calc libreoffice-impress libreoffice-style-sifr libreoffice-gtk3
+sudo apt install net-tools dnsutils nmap htop iftop git
+lm-sensors -> sudo sensors-detect
+bmon
+lspci
+dmidecode

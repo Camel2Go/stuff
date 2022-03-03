@@ -1,0 +1,439 @@
+======= headless install ===========
+AUTO_SETUP_ACCEPT_LICENSE=1
+AUTO_SETUP_LOCALE=de_DE.UTF-8
+AUTO_SETUP_KEYBOARD_LAYOUT=de
+AUTO_SETUP_TIMEZONE=Europe/Berlin
+AUTO_SETUP_NET_ETHERNET_ENABLED=0
+AUTO_SETUP_NET_WIFI_ENABLED=1
+AUTO_SETUP_NET_WIFI_COUNTRY_CODE=DE
+AUTO_SETUP_NET_HOSTNAME=zeropi
+AUTO_SETUP_HEADLESS=1
+AUTO_SETUP_SSH_SERVER_INDEX=-2
+CONFIG_BOOT_WAIT_FOR_NETWORK=2
+CONFIG_SERIAL_CONSOLE_ENABLE=0
+CONFIG_ENABLE_IPV6=0
+-> wifi-creds
+
+
+
+======= setup =======
+User: root    PW: dietpi
+sudo passwd
+sudo dietpi-config 
+sudo adduser --disabled-login --no-create-home server
+sudo passwd server
+
+sudo dietpi-config
+-> timezone, hostname, partition
+-> Advanced Options -> APT cache -> To disk
+
+sudo dietpi-software
+0 OpenSSH
+5 Alsa
+17 Git
+50 Syncthing
+96 Samba Server
+130 Python3
+152 Avahi
+187 Cups
+
+sudo apt install bat locate tree file xz-utils apt-utils
+
+<> .bashrc
+PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+alias ls='ls --color=auto'
+alias la='ls --color=auto -A'
+alias ll='ls --color=auto -alF'
+
+alias grep='grep --color=auto'
+alias rm='rm -i'  
+alias cp='cp -i'
+alias mv='mv -i'
+alias cat='batcat'
+<>
+
+<> authorized_keys
+...keys...
+<>
+
+<> /etc/ssh/sshd_config
+Port 2606
+AddressFamily any
+PasswordAuthentication no
+<>
+
+
+======= crontab =======
+sudo crontab -e
+35  04 *   *   *     find /media/server/Scans/ -mtime +14 -exec rm {} +
+00  05 *   *   *     /sbin/shutdown -r now
+@reboot              brscan-skey
+
+crontab -e
+40  04 *   *   *     offlineimap
+30  04 *   *   *     sh /home/pi/stuff/noip/noip.sh
+@reboot              sleep 5 && 
+
+
+======= samba =======
+sudo adduser dietpi server 
+-> dietpi kann /media/server/ verwalten
+
+<> /etc/fstab
+UUID=58a7299d-04e5-4599-87e3-2976ca211716 /media/server ext4 defaults 0 0
+<>
+
+<> /etc/samba/smb.conf
+[NAS]
+   comment = Network Attached Storage
+   browsable = yes
+   path = /media/server
+   public = no
+   valid users = server
+   writable = yes
+   create mask = 0664
+   directory mask = 0775
+<>
+
+sudo chown server:server /media/server/
+sudo smbpasswd -a server
+
+
+======= cups =======
+
+sudo apt install printer-driver-gutenprint
+(sudo cupsctl --remote-admin)
+sudo adduser server lpadmin
+-> server kann cups-settings ändern
+
+https://raspi.local:631
+-> Settings
+-> add Printer
+-> Canon Pixma IP4600
+-> Color Model: CMYK
+
+======= sane =======
+sudo adduser server users
+-> server kann Scans von scanservjs verwalten
+
+----- Backend -----
+sudo apt install sane sane-utils qemu binfmt-support qemu-user-static
+scp sane64_brother2.tar.xz raspi:~
+tar xf sane64_brother2.tar.xz
+sudo cp -r root/* / && rm -r root/ sane64_brother2.tar.xz
+sudo systemctl enable saned.socket
+sudo adduser saned lp
+-> saned kann scannen
+
+----- Frontend -----
+https://github.com/sbs20/scanservjs/
+
+sudo cp /var/www/scanservjs/config/config.default.js /var/www/scanservjs/config/config.local.js
+
+<> /var/www/scanservjs/config/config.local.js
+config.port = 11111;
+config.ocrLanguage = 'deu';
+config.previewResolution = 75;
+<>
+
+mkdir /media/server/Scans
+cd /var/www/scanservjs/data
+sudo rm -r output/
+sudo ln -s /media/server/Scans/ output
+
+<> /var/www/scanservjs/server/scan-controller.js
+// Update preview with the first image (pre filter)
+// await this.updatePreview(files[0].name);
+<>
+
+------ Client ------
+<> /etc/sane.d/net.conf
+raspi.local
+<>
+
+
+======== raspotify ========
+<> /boot/config.txt
+#-------Onboard sound-----------
+dtparam=audio=on 
+<>
+
+sudo apt install libasound2-plugin-equal
+curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
+
+<> /etc/raspotify/conf
+LIBRESPOT_NAME="Raspi"
+LIBRESPOT_BITRATE="320"
+LIBRESPOT_DEVICE_TYPE="speaker"
+LIBRESPOT_DEVICE="default"
+<>
+
+<> /etc/asound.conf
+pcm.!default {
+  type plug
+  slave.pcm plugequal
+}
+ctl.!default {
+  type hw card 0
+}
+ctl.equal {
+  type equal
+  controls /var/lib/raspotify/.alsaequal.bin
+}
+pcm.plugequal {
+  type equal
+  controls /var/lib/raspotify/.alsaequal.bin
+  slave.pcm "plughw:0,0"
+}
+pcm.equal {
+  type plug
+  slave.pcm plugequal
+}
+<>
+
+alsamixer
+
+sudo alsamixer -D equal
+
+sudo su
+cd /var/lib/raspotify/
+ls -la
+chown 62638:62638 .alsaequal.bin
+
+
+======= bluealsa ========
+sudo dietpi-config
+-> Advanced Options -> bluetooth
+
+<> /etc/apt/sources.list
+deb https://deb.debian.org/debian/ bookworm main contrib non-free
+<>
+
+sudo apt install bluez-alsa-utils bluez bluez-tools libspa-0.2-bluetooth
+
+sudo mkdir /etc/systemd/system/bluealsa.service.d
+sudo mkdir /etc/systemd/system/bthelper@.service.d
+
+<> /etc/bluetooth/main.conf
+Class = 0x200414
+DiscoverableTimeout = 0
+<>
+
+<> /etc/systemd/system/bthelper@.service.d/override.conf
+[Service]
+Type=oneshot
+<>
+
+<> /etc/systemd/system/bt-agent@.service
+[Unit]
+Description=Bluetooth Agent
+Requires=bluetooth.service
+After=bluetooth.service
+
+[Service]
+ExecStartPre=/bin/hciconfig %I piscan
+ExecStartPre=/bin/hciconfig %I sspmode 1
+ExecStart=/usr/bin/bt-agent --capability=NoInputNoOutput
+RestartSec=5
+Restart=always
+KillSignal=SIGUSR1
+
+[Install]
+WantedBy=multi-user.target
+<>
+
+<> /etc/systemd/system/bluealsa.service.d/override.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/bluealsa -i hci0 -p a2dp-sink
+RestartSec=5
+Restart=always
+
+<> /etc/systemd/system/bluealsa-aplay.service
+[Unit]
+Description=BlueALSA aplay
+Requires=bluealsa.service
+After=bluealsa.service sound.target
+
+[Service]
+Type=simple
+User=root
+ExecStartPre=/bin/sleep 2
+ExecStart=/usr/bin/bluealsa-aplay --pcm-buffer-time=250000 00:00:00:00:00:00
+RestartSec=5
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+<>
+
+sudo systemctl enable bt-agent@hci0.service
+sudo systemctl enable bluealsa-aplay
+
+bluetoothctl discoverable on
+
+
+
+========== RTDE ===========
+sudo apt install python3-lxml
+
+<> /etc/systemd/user/rtde.service
+[Unit]
+Description=RT.DE - Downloader
+After=network.target
+
+[Service]
+Type=simple
+User=server
+Restart=on-failure
+RestartSec=30
+ExecStartPre=/bin/sleep 10
+ExecStart=/media/server/RTDE/main.py
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=network.target
+<>
+
+sudo systemctl daemon-reload
+sudo systemctl enable rtde.service
+
+======= OpenVPN Bridge ========
+curl -L https://install.pivpn.io | bash
+
+<> /etc/openvpn/server.conf
+#dev tun
+dev tap0
+#server 10.8.0.0 255.255.255.0
+server-bridge 192.168.166.2 255.255.255.0 192.168.166.128 192.168.166.254
+<>
+
+
+<> ovpns/up
+#!/bin/bash
+#################################
+# Set up Ethernet bridge on Linux
+# Requires: bridge-utils
+#################################
+# Define Bridge Interface
+br="br0"
+# Define list of TAP interfaces to be bridged,
+# for example tap="tap0 tap1 tap2".
+tap="tap0"
+# Define physical ethernet interface to be bridged
+# with TAP interface(s) above.
+eth="eth0"
+eth_ip="192.168.166.2"
+eth_netmask="255.255.255.0"
+eth_broadcast="192.168.166.255"
+for t in $tap; do
+    openvpn --mktun --dev $t
+done
+brctl addbr $br
+brctl addif $br $eth
+for t in $tap; do
+    brctl addif $br $t
+done
+for t in $tap; do
+    ifconfig $t 0.0.0.0 promisc up
+done
+ifconfig $eth 0.0.0.0 promisc up
+ifconfig $br $eth_ip netmask $eth_netmask broadcast $eth_broadcast
+<>
+
+
+<> ovpns/down
+#!/bin/bash
+####################################
+# Tear Down Ethernet bridge on Linux
+####################################
+# Define Bridge Interface
+br="br0"
+# Define list of TAP interfaces to be bridged together
+tap="tap0"
+ifconfig $br down
+brctl delbr $br
+for t in $tap; do
+    openvpn --rmtun --dev $t
+done
+<>
+
+
+<> ovpns/routes
+#!/bin/bash
+iptables -A INPUT -i tap0 -j ACCEPT
+iptables -A INPUT -i br0 -j ACCEPT
+iptables -A FORWARD -i br0 -j ACCEPT
+<>
+
+
+pivpn add nopass
+<> client.ovpn
+dev tun -> dev tap
+<>
+
+https://openvpn.net/community-downloads/
+
+
+
+======= offlineimap =======
+mkdir /media/server/.Mail
+sudo apt install offlineimap
+<> .offlineimaprc
+[general]
+accounts = art, camel
+
+[Account art]
+localrepository = Localart
+remoterepository = Remoteart
+
+[Repository Localart]
+type = Maildir
+localfolders = /media/server/.Mail/art.2001
+sync_deletes = no
+
+[Repository Remoteart]
+type = IMAP
+remotehost = imap.web.de
+remoteuser = art.2001
+readonly = True
+folderfilter = lambda foldername: foldername in ['TRASH', 'Spam']
+remotepass = *********
+sync_deletes = no
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+[Account camel]
+localrepository = Localcamel
+remoterepository = Remotecamel
+
+[Repository Localcamel]
+type = Maildir
+localfolders = /media/server/.Mail/camel2go
+sync_deletes = no
+
+[Repository Remotecamel]
+type = IMAP
+remotehost = imap.web.de
+remoteuser = camel2go
+readonly = True
+folderfilter = lambda foldername: foldername in ['Papierkorb', 'Spam']
+remotepass = *********
+sync_deletes = no
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+
+
+
+
+======== Speed =========
+Drive direct write
+1073741824 Bytes (1,1 GB, 1,0 GiB) kopiert, 172,924 s, 6,2 MB/s
+
+Drive direct read
+1073741824 Bytes (1,1 GB, 1,0 GiB) kopiert, 53,4244 s, 20,1 MB/s
+
+Card direct write
+1073741824 Bytes (1,1 GB, 1,0 GiB) kopiert, 54,753 s, 19,6 MB/s
+
+Card direct read
+1073741824 Bytes (1,1 GB, 1,0 GiB) kopiert, 45,4215 s, 23,6 MB/s

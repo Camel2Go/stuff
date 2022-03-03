@@ -1,0 +1,74 @@
+fastboot flash recovery twrp-3.2.1-0-FP2.img
+
+***Fairphone Open***
+download Tingle		https://github.com/ale5000-git/tingle
+run python main.py
+Install FDroid
+add microG Repository 	microG F-Droid repo
+Install microG Services Core
+Install microG Services Framework Proxy
+Install FakeStore
+Install MozillaNlpBackend
+Install NominatimNlpBackend
+(dial *#*#2432546#*#*)
+
+
+======= SafetyNet =======
+---------- current ------------
+-> normal LineageOS + OpanGApps Pico + Magisk
+-> Activate MagiskHide for GsmCore
+
+------------ microG --------------
+-> lineageOS + MicroG + Magisk
+-> install DroidGuardHelper
+-> microG-Settings -> SafetyNet
+-> Activate MagiskHide for GsmCore + DroidGuardHelper
+-> Make sure that SafetyNet doesnt show API-Error
+-> optional:
+https://github.com/kdrag0n/safetynet-fix
+https://github.com/kam821/safetypatch
+https://www.google.com/android/uncertified
+
+
+====== RaspiCheck =======
+cp id_ed25519.pub id_ed25519 /sdcard/Documents
+
+
+====== Screenrecord =====
+adb shell screenrecord --output-format=h264 - | ffplay -
+
+
+================= NFC ===============
+------------ Extendet-Length ------------
+mount -o rw,remount /system
+-><- /system/vendor/etc/libnfc-nci.conf
+###############################################################################
+# Enable extended APDU length for ISO_DEP
+ISO_DEP_MAX_TRANSCEIVE=0xFEFF
+
+
+
+--------------- G5 -------------------
+https://github.com/NXP/nfc-NXPNFCC_FW/blob/master/pn548ad/64-bit/libpn548ad_fw.so
+mount -o remount,rw {/, /system, /vendor, /firmware}
+setenforce {0,1}
+/system/vendor/firmware/libpn548ad_fw.so
+chmod 644 libpn548ad_fw.so
+adb logcat -s NxpFwDnld -s NxpHal
+
+
+
+========= Fix dict.cc ==========
+-> get and extract apk
+-> https://github.com/iBotPeaches/Apktool
+java -jar apktool_2.5.0.jar d base.apk
+
+-><- AndroidManifest.xml
+<application ... android:extractNativeLibs="true" ...
+    <uses-library android:name="org.apache.http.legacy" android:required="false" />
+
+java -jar apktool_2.5.0.jar b base
+-> apk in base/dist
+keytool -genkey -v -keystore keyStore.keystore -alias app -keyalg RSA -keysize 2048 -validity 10000
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore keyStore.keystore dictcc.apk app
+adb install dictcc.apk
