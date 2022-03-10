@@ -211,13 +211,19 @@ deb https://deb.debian.org/debian/ bookworm main contrib non-free
 
 sudo apt install bluez-alsa-utils bluez bluez-tools libspa-0.2-bluetooth
 
-sudo mkdir /etc/systemd/system/bluealsa.service.d
+sudo mkdir /etc/systemd/system/bluez-alsa.service.d
 sudo mkdir /etc/systemd/system/bthelper@.service.d
 
 <> /etc/bluetooth/main.conf
 Class = 0x200414
 DiscoverableTimeout = 0
 <>
+
+<> /etc/bluetooth/pin.conf
+*     <pin>
+<>
+
+sudo chmod 600 /etc/bluetooth/pin.conf
 
 <> /etc/systemd/system/bthelper@.service.d/override.conf
 [Service]
@@ -231,9 +237,10 @@ Requires=bluetooth.service
 After=bluetooth.service
 
 [Service]
+ExecStartPre=/bin/bluetoothctl discoverable on
 ExecStartPre=/bin/hciconfig %I piscan
-ExecStartPre=/bin/hciconfig %I sspmode 1
-ExecStart=/usr/bin/bt-agent --capability=NoInputNoOutput
+ExecStartPre=/bin/hciconfig %I sspmode 0
+ExecStart=/usr/bin/bt-agent -p /etc/bluetooth/pin.conf
 RestartSec=5
 Restart=always
 KillSignal=SIGUSR1
@@ -242,7 +249,7 @@ KillSignal=SIGUSR1
 WantedBy=multi-user.target
 <>
 
-<> /etc/systemd/system/bluealsa.service.d/override.conf
+<> /etc/systemd/system/bluez-alsa.service.d/override.conf
 [Service]
 ExecStart=
 ExecStart=/usr/bin/bluealsa -i hci0 -p a2dp-sink
@@ -252,8 +259,8 @@ Restart=always
 <> /etc/systemd/system/bluealsa-aplay.service
 [Unit]
 Description=BlueALSA aplay
-Requires=bluealsa.service
-After=bluealsa.service sound.target
+Requires=bluez-alsa.service
+After=bluez-alsa.service sound.target
 
 [Service]
 Type=simple
@@ -270,9 +277,9 @@ WantedBy=multi-user.target
 sudo systemctl enable bt-agent@hci0.service
 sudo systemctl enable bluealsa-aplay
 
-bluetoothctl discoverable on
-
-
+---------- Fernseher ----------- 
+sudo hciconfig hci0 sspmode 1
+bt-agent
 
 ========== RTDE ===========
 sudo apt install python3-lxml

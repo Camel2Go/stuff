@@ -1,0 +1,12 @@
+Compal CH7467CE
+CH7467CE-6.15.0.4-NOSH
+
+68:02:b8:46:89:3c
+614401828128000010
+
+
+
+# ajaxSet({'fun':127,"type":Modem_mode,"Tracert_IP":Tracert_IP,"MaxHops":MaxHops,"DataSize":DataSize,"BasePort":BasePort,"ResolveHost":ResolveHost});		
+# ajaxSet({'fun':126,"Type":Modem_mode,"Target_IP":Target_IP,"Ping_Size":Ping_Size,"Num_Ping":Num_Ping,"Ping_Interval":Ping_Interval});	
+# ajaxGet({'fun':128},'',Get_data);}, 1000);	
+# ajaxGet({'fun':129},'',Get_data);}, 1000);
