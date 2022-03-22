@@ -15,16 +15,24 @@ def rot13(enc: str) -> str:
             dec += x
     return dec
 
-def caesar(enc: str) -> list:
-    out = []
-    for i in range(26):
-        plain = ''
-        for c in enc:
-            if c.isupper(): plain += chr(((ord(c) - 65 + i) % 26) + 65)
-            elif c.islower(): plain += chr(((ord(c) - 97 + i) % 26) + 97)
-            else: plain += c
-        out.append(plain)
-    return out
+def caesar_decrypt(cipher: str, key=None):
+    if not key: return [caesar_decrypt(cipher, chr(key)) for key in range(97, 123)]
+    plain = ''
+    for x in cipher:
+        if x.islower(): plain += chr(((ord(x) - ord(key.lower())) % 26) + 97)
+        elif x.isupper(): plain +=  chr(((ord(x) - ord(key.upper())) % 26) + 65)
+        else: plain += x
+    return plain
+
+def vigenere_decrypt(cipher, key):
+    plain = ''
+    i = 0
+    for x in cipher:
+        if x.isalpha():
+            plain += caesar_decrypt(x, key[i % len(key)])
+            i += 1
+        else: plain += x
+    return plain
 
 # https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
 def extendedeuclidalgo(x: int, y: int) -> list:
