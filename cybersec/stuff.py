@@ -16,7 +16,15 @@ def rot13(enc: str) -> str:
     return dec
 
 def caesar(enc: str) -> list:
-    return [''.join([chr(((ord(x) - 97 + i) % 26) + 97) for x in enc]) for i in range(26)]
+    out = []
+    for i in range(26):
+        plain = ''
+        for c in enc:
+            if c.isupper(): plain += chr(((ord(c) - 65 + i) % 26) + 65)
+            elif c.islower(): plain += chr(((ord(c) - 97 + i) % 26) + 97)
+            else: plain += c
+        out.append(plain)
+    return out
 
 # https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
 def extendedeuclidalgo(x: int, y: int) -> list:
@@ -108,3 +116,36 @@ def ddes_encrypt(cipher, key1, key2) -> str:
     from Crypto.Cipher import DES
 
     return DES.new(key1.encode(), DES.MODE_ECB).decrypt(DES.new(key2.encode(), DES.MODE_ECB).decrypt(bytes.fromhex(cipher))).decode()
+
+
+def rail_fence_decrypt(cipher, rails = 0):
+    '''
+    Encryption for Rail-Fence, can deal with unpadded messages
+    https://en.wikipedia.org/wiki/Rail_fence_cipher
+
+    param   cipher      ciphertext as string
+    param   rails       amount of rails
+    returns             encoded plaintext
+    '''
+    if not rails: return print("brute-force not implemented")
+    from math import ceil
+    
+    diag = ceil((len(cipher) - rails) / (rails - 1)) + 1
+    padd = -(len(cipher) - rails) % (rails - 1)
+    first = ceil(diag / 2) + (not padd and not diag % 2)
+    last = ceil((diag - 1) / 2) + (not padd and diag % 2)
+    cipher = [cipher[:first]] + [cipher[i:i + diag - ((len(cipher) - i) / diag < padd)] for i in range(first, len(cipher) - last, diag)] + [cipher[-last:]]
+    cipher = list(map(list, cipher))
+    plain = ''
+    pos = 0
+    step = -1
+    while cipher[pos]:
+        plain += cipher[pos].pop(0)
+        if pos == 0 or pos == len(cipher) - 1: step = -step
+        pos += step
+    return plain
+
+def substitution_decrypt(cipher, alphabet):
+    mapping = dict(zip(alphabet.lower(), 'abcdefghijklmnopqrstuvwxyz'))
+    mapping.update(dict(zip(alphabet.upper(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')))
+    return ''.join([mapping[x] if x.isalpha() else x for x in cipher])
