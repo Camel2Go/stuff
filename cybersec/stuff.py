@@ -15,12 +15,13 @@ def rot13(enc: str) -> str:
             dec += x
     return dec
 
-def caesar_decrypt(cipher: str, key=None):
-    if not key: return [caesar_decrypt(cipher, chr(key)) for key in range(97, 123)]
+def caesar_decrypt(cipher: str, key = None, lower = True, upper = True, digit = False):
+    if not key: return [caesar_decrypt(cipher, chr(key), lower, upper, digit) for key in range(97, 123)]
     plain = ''
     for x in cipher:
-        if x.islower(): plain += chr(((ord(x) - ord(key.lower())) % 26) + 97)
-        elif x.isupper(): plain +=  chr(((ord(x) - ord(key.upper())) % 26) + 65)
+        if lower and x.islower(): plain += chr(((ord(x) - ord(key.lower())) % 26) + 97)
+        elif upper and x.isupper(): plain +=  chr(((ord(x) - ord(key.upper())) % 26) + 65)
+        elif digit and x.isdigit(): plain += chr(((ord(x) - ord(key)) % 10) + 48)
         else: plain += x
     return plain
 
@@ -126,7 +127,7 @@ def ddes_encrypt(cipher, key1, key2) -> str:
     return DES.new(key1.encode(), DES.MODE_ECB).decrypt(DES.new(key2.encode(), DES.MODE_ECB).decrypt(bytes.fromhex(cipher))).decode()
 
 
-def rail_fence_decrypt(cipher, rails = 0):
+def rail_fence_decrypt(cipher, rails):
     '''
     Encryption for Rail-Fence, can deal with unpadded messages
     https://en.wikipedia.org/wiki/Rail_fence_cipher
