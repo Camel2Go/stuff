@@ -1,0 +1,10 @@
+============== IDEAS =================
+
+- root
+- autostart app
+- turn off when long power press
+- navigate with long volume press
+- custom boot-animation
+- control via bluetooth
+- use flash als light
+- 3D audio spectrum visualizer / spectrum bars

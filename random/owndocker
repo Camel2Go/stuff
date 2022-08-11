@@ -16,7 +16,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENDOFFILE
 }
 
-if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+# if run as owndockerinit: copy owndocker to current dir and run afterwards
+if [ -z ${0##*owndockerinit} ]
+then
+    cp $0 $PWD/owndocker
+    ./owndocker
+    exit 0
+fi
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]
+then
     echo '  Usage: ./owndocker [-nb]'
     echo '  h  --help          |print help'
     echo '  f  --file          |create dockerfile for customization'

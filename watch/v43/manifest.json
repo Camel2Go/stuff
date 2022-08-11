@@ -1,0 +1,8 @@
+{
+    "manifest": {
+        "application": {
+            "bin_file": "ID205.bin",
+            "dat_file": "ID205.dat"
+        }
+    }
+}
