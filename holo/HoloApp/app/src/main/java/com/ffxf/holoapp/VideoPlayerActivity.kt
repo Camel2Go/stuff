@@ -21,6 +21,7 @@ import java.io.File
 class VideoPlayerActivity : Activity(), MediaPlayer.OnCompletionListener {
     private lateinit var mVV: VideoView
     private lateinit var audioManager: AudioManager
+    private var isVolumeKeyReleased = false
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +41,6 @@ class VideoPlayerActivity : Activity(), MediaPlayer.OnCompletionListener {
         mVV.start()
     }
 
-
-
     override fun onCompletion(p0: MediaPlayer?) {
         this.finish()
     }
@@ -54,7 +53,7 @@ class VideoPlayerActivity : Activity(), MediaPlayer.OnCompletionListener {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_POWER ||keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+        if (keyCode == KeyEvent.KEYCODE_POWER || keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             event.startTracking()
             return true
         }
@@ -62,7 +61,7 @@ class VideoPlayerActivity : Activity(), MediaPlayer.OnCompletionListener {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        if (!event.isCanceled) {
+        if (isVolumeKeyReleased and !event.isCanceled) {
             when (keyCode) {
                 KeyEvent.KEYCODE_VOLUME_UP -> audioManager.adjustStreamVolume(
                     AudioManager.STREAM_MUSIC,
@@ -76,6 +75,7 @@ class VideoPlayerActivity : Activity(), MediaPlayer.OnCompletionListener {
                 )
             }
         }
+        isVolumeKeyReleased = true
         return super.onKeyUp(keyCode, event)
     }
 

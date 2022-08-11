@@ -22,19 +22,18 @@ class MainActivity : AppCompatActivity() {
         if (result.resultCode == Activity.RESULT_OK) {
             when (result.data?.extras?.get("keyCode")) {
                 KeyEvent.KEYCODE_POWER -> {
-                    startActivity(Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN"));
+                    // startActivity(Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN"));
                     // PowerManagerService.shutdown()
                     // This only works for system applications (signed with phone vendor key) with special permissions
                 }
                 KeyEvent.KEYCODE_VOLUME_UP -> {
-                    TODO("modulo ändern")
-                    videoIndex = (videoIndex + 1) % videoFiles.size
-                    playVideo()
+                    // normal modulo -.-
+                    videoIndex = ((videoIndex + 1) % videoFiles.size + videoFiles.size) % videoFiles.size
+                    launchVideoPlayerActivity()
                 }
                 KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                    TODO("modulo ändern")
-                    videoIndex = (videoIndex - 1) % videoFiles.size
-                    playVideo()
+                    videoIndex = ((videoIndex - 1) % videoFiles.size + videoFiles.size) % videoFiles.size
+                    launchVideoPlayerActivity()
                 }
             }
         }
@@ -48,9 +47,9 @@ class MainActivity : AppCompatActivity() {
             return
         }
         Log.d(LOG_TAG, videoFiles.size.toString())
-        playVideo()
+        launchVideoPlayerActivity()
     }
-    private fun playVideo() {
+    private fun launchVideoPlayerActivity() {
         val videoPlayerIntent = Intent(this, VideoPlayerActivity::class.java)
         videoPlayerIntent.putExtra("videoFile", videoFiles[videoIndex])
         videoPlayerLauncher.launch(videoPlayerIntent)
