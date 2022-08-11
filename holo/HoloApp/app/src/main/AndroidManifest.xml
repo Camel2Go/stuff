@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ffxf.holoapp">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.PREVENT_POWER_KEY" />
-    <uses-permission android:name="android.permission.SHUTDOWN"
+    <uses-permission
+        android:name="android.permission.SHUTDOWN"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -18,10 +19,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HoloApp"
         tools:targetApi="31">
+        <service
+            android:name=".HoloService"
+            android:exported="false"></service>
+        <service
+            android:name=".ButtonService"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
-           <intent-filter>
+            android:exported="true">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,11 +38,10 @@
         </activity>
         <activity
             android:name=".VideoPlayerActivity"
-            android:launchMode="singleTask"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:configChanges="orientation|screenSize"
             android:exported="true"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
     </application>
 
 </manifest>
