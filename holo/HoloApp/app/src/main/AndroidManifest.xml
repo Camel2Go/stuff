@@ -4,6 +4,9 @@
     package="com.ffxf.holoapp">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.PREVENT_POWER_KEY" />
+    <uses-permission android:name="android.permission.SHUTDOWN"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -28,8 +31,8 @@
             android:name=".VideoPlayerActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:exported="true">
-
+            android:exported="true"
+            android:configChanges="orientation|screenSize">
         </activity>
     </application>
 
