@@ -8,3 +8,34 @@
 - control via bluetooth
 - use flash als light
 - 3D audio spectrum visualizer / spectrum bars
+
+
+
+
+============= ROOT ===================
+
+Firmware-Infos:				https://www.huaweiblog.de/firmware-update-was-bedeutet-cust-emui-und-co
+Magisk-Infos:				https://github.com/topjohnwu/Magisk/blob/171738787600cba32da5a3f9c39e31e78ba0032a/docs/install.md#huawei
+
+Firmware-Download: 			http://huawehttps://www.youtube.com/watch?v=2Ow91TOL4DMi-firmware.com/phone-list/huawei-p8-lite/ale-l21
+Huawei-Firmware-Finder:		http://pro-teammt.ru/projects/hwff/v2/GetLatestVersion.action
+Huawei-Update-Extractor:	https://forum.xda-developers.com/t/tool-huawei-update-extractor-updated-v0-9-9-5-open-source-library.2433454/
+
+
+Bootloader:					https://github.com/mashed-potatoes/PotatoNV
+
+Firmware: 					ALE-L21C432B638 (before: ALE-L21C432B634)
+
+----------- Bootloader-unlock --------------
+
+https://forum.xda-developers.com/t/guide-unlock-bootloader-root-the-device-and-install-any-custom-rom-ale-l23-21.3977067/
+
+Flash Transition -> Downgrade to Android 5 -> Root -> Get Code -> Upgrade to Android 6 
+- Download Firmware, extract dload to sd-card, dial *#*#2846579#*#* -> Software Upgrade
+- Transition: 	C900B500
+- Android 5: 	C432B170
+- Android 6:	C432B638
+- Root with KingoRoot-PC
+su -c "grep -m1 -aoE 'WVLOCK.{14}[0-9]{16}' /dev/block/mmcblk0p7 |grep -aoE '[0-9]{16}'"
+
+->>>> 1018578754214242

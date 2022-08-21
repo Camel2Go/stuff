@@ -21,11 +21,6 @@ class MainActivity : AppCompatActivity() {
     private var videoPlayerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             when (result.data?.extras?.get("keyCode")) {
-                KeyEvent.KEYCODE_POWER -> {
-                    // startActivity(Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN"));
-                    // PowerManagerService.shutdown()
-                    // This only works for system applications (signed with phone vendor key) with special permissions
-                }
                 KeyEvent.KEYCODE_VOLUME_UP -> {
                     // normal modulo -.-
                     videoIndex = ((videoIndex + 1) % videoFiles.size + videoFiles.size) % videoFiles.size
@@ -38,17 +33,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        this.videoFiles = File( Environment.getExternalStorageDirectory().path + videoPath).listFiles{ _, filename -> filename.endsWith("mp4")}
+        this.videoFiles = File( Environment.getExternalStorageDirectory().path + videoPath).listFiles{ _, filename -> filename.endsWith("mp4")} as Array<File>
         if (this.videoFiles.isEmpty()) {
             Log.d(LOG_TAG, "no videofiles present")
             return
         }
         Log.d(LOG_TAG, videoFiles.size.toString())
+        Log.d(LOG_TAG, "aaaaaaaaaaaa")
         launchVideoPlayerActivity()
     }
+
     private fun launchVideoPlayerActivity() {
         val videoPlayerIntent = Intent(this, VideoPlayerActivity::class.java)
         videoPlayerIntent.putExtra("videoFile", videoFiles[videoIndex])
