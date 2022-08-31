@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     private val LOG_TAG: String = MainActivity::class.java.simpleName
     private val videoPath: String = "/Download/"
     private var videoFiles: Array<File> = emptyArray()
-    private var videoIndex = 1
+    private var videoIndex = 0
     private var videoPlayerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             when (result.data?.extras?.get("keyCode")) {

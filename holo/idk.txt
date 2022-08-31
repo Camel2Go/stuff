@@ -10,6 +10,13 @@
 - 3D audio spectrum visualizer / spectrum bars
 
 
+============== Magisk ================
+not working: 	pm list packages -U | grep holoapp 
+working:		cat /data/system/packages.xml | grep holoapp
+> userID:		10033
+
+print:		magisk --sqlite "SELECT * FROM policies"
+insert:		magisk --sqlite "INSERT INTO policies VALUES(10033, 2, 0, 1, 1)"
 
 
 ============= ROOT ===================
@@ -17,7 +24,7 @@
 Firmware-Infos:				https://www.huaweiblog.de/firmware-update-was-bedeutet-cust-emui-und-co
 Magisk-Infos:				https://github.com/topjohnwu/Magisk/blob/171738787600cba32da5a3f9c39e31e78ba0032a/docs/install.md#huawei
 
-Firmware-Download: 			http://huawehttps://www.youtube.com/watch?v=2Ow91TOL4DMi-firmware.com/phone-list/huawei-p8-lite/ale-l21
+Firmware-Download: 			http://huawei-firmware.com/phone-list/huawei-p8-lite/ale-l21
 Huawei-Firmware-Finder:		http://pro-teammt.ru/projects/hwff/v2/GetLatestVersion.action
 Huawei-Update-Extractor:	https://forum.xda-developers.com/t/tool-huawei-update-extractor-updated-v0-9-9-5-open-source-library.2433454/
 
@@ -25,6 +32,9 @@ Huawei-Update-Extractor:	https://forum.xda-developers.com/t/tool-huawei-update-e
 Bootloader:					https://github.com/mashed-potatoes/PotatoNV
 
 Firmware: 					ALE-L21C432B638 (before: ALE-L21C432B634)
+
+Recovery:					https://forum.xda-developers.com/t/twrp-3-2-3-0-ale-all-versions-huawei-p8lite-alice-18-59-18-02-2019.3609582/
+
 
 ----------- Bootloader-unlock --------------
 

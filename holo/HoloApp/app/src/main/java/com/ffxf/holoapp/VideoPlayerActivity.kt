@@ -83,12 +83,12 @@ class VideoPlayerActivity : Activity(){
                 KeyEvent.KEYCODE_VOLUME_UP -> audioManager.adjustStreamVolume(
                     AudioManager.STREAM_MUSIC,
                     AudioManager.ADJUST_RAISE,
-                    AudioManager.FLAG_SHOW_UI
+                    AudioManager.FLAG_VIBRATE
                 )
                 KeyEvent.KEYCODE_VOLUME_DOWN -> audioManager.adjustStreamVolume(
                     AudioManager.STREAM_MUSIC,
                     AudioManager.ADJUST_LOWER,
-                    AudioManager.FLAG_SHOW_UI
+                    AudioManager.FLAG_VIBRATE
                 )
             }
         }
@@ -108,7 +108,7 @@ class VideoPlayerActivity : Activity(){
     }
 
     override fun finish() {
-        super.finish()
         unregisterReceiver(screenOffReceiver)
+        super.finish()
     }
 }
