@@ -11,7 +11,7 @@ AUTO_SETUP_HEADLESS=1
 AUTO_SETUP_SSH_SERVER_INDEX=-2
 CONFIG_BOOT_WAIT_FOR_NETWORK=2
 CONFIG_SERIAL_CONSOLE_ENABLE=0
-CONFIG_ENABLE_IPV6=0
+CONFIG_ENABLE_IPV6=1
 -> wifi-creds
 
 
@@ -36,6 +36,8 @@ sudo dietpi-software
 130 Python3
 152 Avahi
 187 Cups
+93 Pi-Hole
+182 Unbound
 
 sudo apt install bat locate tree file xz-utils apt-utils
 
@@ -280,6 +282,14 @@ sudo systemctl enable bluealsa-aplay
 ---------- Fernseher ----------- 
 sudo hciconfig hci0 sspmode 1
 bt-agent
+
+
+
+=========== Pi-Hole ============
+install pi-hole + unbound via dietpi-software
+DNS -> Custom -> 127.0.0.1#5335 / ::1#5335
+AD-Lists -> add https://www.phishing.army/index.html
+
 
 ========== RTDE ===========
 sudo apt install python3-lxml
