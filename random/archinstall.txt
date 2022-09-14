@@ -138,6 +138,7 @@ vim /etc/pacman.conf
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 vim .zshrc 
 > ZSH_THEME="agnoster"
+> export EDITOR = 'vim'
 > alias ls="lsd"
 > alias cat="bat"
 
@@ -161,6 +162,21 @@ unzip -d ~/.themes Tokyonight-Dark-B.zip
 unzip -d ~/.config/gtk-4.0 Tokyonight-Dark-B-Gnome42.zip
 mv ~/.config/gtk-4.0/Tokyonight-Dark-B.css ~/.config/gtk-4.0/gtk.css
 
+vim ~/.themes/Tokyonight-Dark-B/gnome-shell/gnome-shell.css
+2285:
+#panel {
+    > remove margin
+    border: 0px solid #414868;
+    border-bottom-width: 2px;
+}
+2599:
+.popup-menu .popup-menu-content {
+    margin: 4px 0px 12px;
+}
+vim ~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk.css
+> remove "-gtk-icon-source: transparent;"
+
+
 # https://github.com/stronk-dev/Tokyo-Night-Linux
 yay spotify
 yay spicetify-cli
@@ -179,11 +195,14 @@ yay gnome-browser-connector
 # https://extensions.gnome.org/extension/2917/bring-out-submenu-of-power-offlogout-button/
 # https://extensions.gnome.org/extension/1238/time/
 
-gnome-tweaks
-> Symbole = "Candy-Icons"
-> VeralteteAnwendungen = "Tokionight-Dark-B"
-
 gnome-extensions-app
 > enable "Launch new instance"
+> enable "User Themes"
 > Arch Linux Updates Indicator: 
 	> gnome-terminal -- /bin/sh -c "yay" 
+
+gnome-tweaks
+> Symbole = "Candy-Icons"
+> Shell = "Tokionight-Dark-B"
+> Veraltete Anwendungen = "Tokionight-Dark-B"
+
