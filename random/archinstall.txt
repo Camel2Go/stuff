@@ -1,0 +1,189 @@
+# ========== installation ===========
+
+# setup
+loadkeys de
+ls /sys/firmware/efi/efivars
+ping google.com
+timedatectl set-ntp true
+
+# partitioning
+fdisk -l
+fdisk
+mkfs.ext4 /dev/sdXY
+mkfs.fat -F 32 /dev/esp	# only on new creation!
+
+# mount root and esp
+mount /dev/sdXY /mnt
+mount --mkdir /dev/sdXY /mnt/boot
+
+# configure mirrors
+curl "https://archlinux.org/mirrorlist/?country=DE&protocol=https&ip_version=4&ip_version=6" > /etc/pacman.d/mirrorlist
+vim /etc/pacman.d/mirrorlist
+> uncomment wanted mirrors
+
+# install base
+pacstrap /mnt 
+	base 				# Minimal package set to define a basic Arch Linux installation
+	linux				# The Linux kernel and modules
+	linux-firmware		# Firmware files for Linux
+
+# generate fstab file
+genfstab -U /mnt >> /mnt/etc/fstab
+cat /mnt/etc/fstab
+
+# chroot to new system
+arch-chroot /mnt
+
+# install needed stuff
+pacman -S 
+	grub					# GNU GRand Unified Bootloader (2)
+	efibootmgr				# Linux user-space application to modify the EFI Boot Manager
+	dhcpcd					# RFC2131 compliant DHCP client daemon
+	networkmanager			# Network connection manager and user applications
+	networkmanager-openvpn	# NetworkManager VPN plugin for OpenVPN
+	nss-mdns				# glibc plugin providing host name resolution via mDNS
+	systemd-resolvconf		# systemd resolvconf replacement (for use with systemd-resolved)
+	ntfs-3g					# NTFS filesystem driver and utilities
+	exfat-utils				# Utilities for exFAT file system
+	sudo					# Give certain users the ability to run some commands as root
+	gnome					# gnome-desktop-environment + gnome-applications
+	gnome-tweaks			# Graphical interface for advanced GNOME 3 settings (Tweak Tool)
+	xdg-utils				# Command line tools that assist applications with a variety of desktop integration tasks
+	firefox					# Standalone web browser from mozilla.org
+	cups					# The CUPS Printing System - daemon package
+	zsh						# A very advanced and programmable command interpreter (shell) for UNIX
+	vim						# Vi Improved, a highly configurable, improved version of the vi text editor
+	base-devel				# Basic developement-tools	
+	cmake					# A cross-platform open-source make system
+	git						# the fast distributed version control system
+	net-tools				# Configuration tools for Linux networking
+	gnu-netcat				# GNU rewrite of netcat, the network piping application
+	neofetch				# A CLI system information tool written in BASH that supports displaying images.
+	tree					# A directory listing program displaying a depth indented list of files
+	bat						# Cat clone with syntax highlighting and git integration
+	lsd						# Modern ls with a lot of pretty colors and awesome icons
+	plocate 				# Alternative to locate, faster and compatible with mlocate's database.
+	bluez-utils				# Development and debugging utilities for the bluetooth protocol stack
+	pacman-contrib			# ontributed scripts and tools for pacman systems
+
+# Time
+ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+hwclock --systohc
+
+# Localization
+vim /etc/locale.gen
+> uncomment "en_US.UTF-8 UTF-8" and "de_DE.UTF-8 UTF-8"
+locale-gen
+echo "LANG=de_DE.UTF-8" > /etc/locale.conf
+echo "KEYMAP=de-latin1-nodeadkeys" > /etc/vconsole.conf
+
+# Networking
+echo "Camellaptop" > /etc/hostname
+echo "172.0.0.1		localhost" >> /etc/hosts
+echo "::1			localhost" >> /etc/hosts
+vim /etc/resolved.conf 
+> uncomment "MulticastDNS=yes"
+echo "[connection]" >> /etc/NetworkManager/conf.d/mdns.conf
+echo "connection.mdns=2" >> /etc/NetworkManager/conf.d/mdns.conf
+
+# user-config
+passwd
+groupadd sudo
+useradd -m -G sudo,storage,power -s /bin/zsh camel2go
+passwd camel2go
+visudo
+> uncomment "%sudo ALL=(ALL:ALL) ALL"
+
+
+# grub
+pacman -S intel-ucode / amd-ucode
+vim /etc/mkinitcpio.conf 
+> MODULES=(i915)
+mkinitcpio -P
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=archlinux
+vim /etc/default/grub
+grub-mkconfig -o /boot/grub/grub.cfg
+
+# services
+systemctl enable gdm.service
+systemctl enable NetworkManager.service
+systemctl enable dhcpcd.service
+systemctl enable cups.service
+systemctl enable cups-browsed.service
+systemctl enable bluetooth.service
+systemctl enable systemd-resolved.service 
+
+# done
+exit
+reboot
+
+
+# ========= customization ===============
+
+# wallpaper
+# https://repository-images.githubusercontent.com/410301907/3126aefc-c58a-410b-9a85-5fed8ff0000d
+
+# remove some user-dirs
+vim ~/.config/user-dirs.dirs
+
+# link open to xdg-open
+sudo ln -s /bin/xdg-open /bin/open
+
+# pacman
+vim /etc/pacman.conf
+> uncomment Color
+> uncomment ParallelDownloads = 5
+
+# https://ohmyz.sh
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+vim .zshrc 
+> ZSH_THEME="agnoster"
+> alias ls="lsd"
+> alias cat="bat"
+
+# https://github.com/Jguer/yay
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+
+# https://github.com/ryanoasis/nerd-fonts
+yay nerd-fonts-hack
+
+# https://github.com/EliverLara/candy-icons
+yay candy-icons
+
+# https://github.com/nathanroark/tokyo-night-gnome-terminal
+> change default theme in any way
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/nathanroark/tokyo-night-gnome-terminal/main/tokyo-night.sh)"
+
+# https://github.com/Fausto-Korpsvart/Tokyo-Night-GTK-Theme
+unzip -d ~/.themes Tokyonight-Dark-B.zip 
+unzip -d ~/.config/gtk-4.0 Tokyonight-Dark-B-Gnome42.zip
+mv ~/.config/gtk-4.0/Tokyonight-Dark-B.css ~/.config/gtk-4.0/gtk.css
+
+# https://github.com/stronk-dev/Tokyo-Night-Linux
+yay spotify
+yay spicetify-cli
+mkdir ~/.config/spicetify/Themes/tokionight
+curl -o ~/.config/spicetify/Themes/tokionight/color.ini https://raw.githubusercontent.com/stronk-dev/Tokyo-Night-Linux/master/.config/spicetify/Themes/Base/color.ini
+curl -o ~/.config/spicetify/Themes/tokionight/user.css https://github.com/stronk-dev/Tokyo-Night-Linux/blob/master/.config/spicetify/Themes/Base/user.css
+
+# extensions
+yay gnome-browser-connector
+# https://extensions.gnome.org/extension/906/sound-output-device-chooser/
+# https://extensions.gnome.org/extension/779/clipboard-indicator/
+# https://extensions.gnome.org/extension/1460/vitals/
+# https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
+# https://extensions.gnome.org/extension/905/refresh-wifi-connections/
+# https://extensions.gnome.org/extension/1010/archlinux-updates-indicator/
+# https://extensions.gnome.org/extension/2917/bring-out-submenu-of-power-offlogout-button/
+# https://extensions.gnome.org/extension/1238/time/
+
+gnome-tweaks
+> Symbole = "Candy-Icons"
+> VeralteteAnwendungen = "Tokionight-Dark-B"
+
+gnome-extensions-app
+> enable "Launch new instance"
+> Arch Linux Updates Indicator: 
+	> gnome-terminal -- /bin/sh -c "yay" 
