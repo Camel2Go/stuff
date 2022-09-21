@@ -1,0 +1,179 @@
+Name: 0x70776e
+
+==================== installation (not working yet, f**ing tensorflow) =================
+# https://pwnagotchi.ai/installation/#installing-on-any-gnu-linux
+
+sudo apt install libpcap0.8 libusb-1.0-0 libnetfilter-queue1 net-tools python3-pip
+sudo apt install python3-pycryptodome python3-requests python3-yaml python3-scapy python3-scipy python3-tf python3-tweepy python3-numpy python3-spidev python3-gast python3-pil python3-flask python3-flask-cors python3-flaskext.wtf python3-dbus python3-toml python3-dateutil python3-websockets
+sudo apt edit-sources
+> add "deb http://raspbian.raspberrypi.org/raspbian/ testing main contrib non-free rpi"
+sudo apt install python3-gast python3-smbus2
+
+python3-opencv python3-pandas python3-joblib python3-importlib-metadata python3-cloudpickle python3-zipp
+
+https://github.com/bettercap/bettercap/releases
+https://github.com/evilsocket/pwngrid/releases
+https://github.com/evilsocket/pwnagotchi/archive/v<x.x.x>.zip
+
+sudo systemctl enable bettercap.service pwngrid-peer.service
+
+
+============== setup ================
+# https://pwnagotchi.ai/configuration/#known-problems
+
+----------- ssh --------------
+pwnagotchi = pi@10.0.0.2
+ssh-copy-id pwnagotchi
+
+--------- connection -------------
+linux_connection_share.sh -> upstream interface must be configured!
+echo "nameserver 8.8.8.8" | sudo tee -a /etc/resolv.conf
+
+---------- expired kalipi-key --------------
+get expired key from https://keyserver.ubuntu.com
+https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x11764ee8ac24832f
+sudo apt-key add kali.key
+
+
+------ resolve issue of update removing kalipi-bootloader -----------
+sudo apt update
+apt download libraspberrypi0
+ar x libraspberrypi0_1%3a1.20220308~buster-1_armhf.deb
+tar xf control.tar.xz
+> remove "Depends: ..." from control
+tar cJf control.tar.xz conffiles control md5sums postinst postrm 
+ar r libraspberrypi0_1%3a1.20220308~buster-1_armhf.deb control.tar.xz 
+sudo apt install ./libraspberrypi0_1%3a1.20220308~buster-1_armhf.deb
+sudo apt-mark hold libraspberrypi0
+sudo apt full-upgrade
+
+---------- fix/better wifi? -----------
+sudo apt remove wpasupplicant
+sudo monstop
+sudo ifconfig wlan0 up
+sudo iw phy phy2 interface add mon0 type monitor
+sudo iw phy `iw dev wlan0 info | gawk '/wiphy/ {printf "phy" $2}'` interface add mon0 type monitor
+sudo ifconfig mon0 up
+sudo ifconfig wlan0 down
+
+---------- resolve issue of broken numpy --------
+https://www.piwheels.org/project/numpy/
+> use latest with wheels for current debian
+sudo pip3 install numpy==1.21.4
+
+----------- install kalipi-config (optional) ----------------
+sudo wget -O /usr/local/bin/kalipi-config https://raw.githubusercontent.com/Re4son/RPi-Tweaks/master/kalipi-config/kalipi-config
+sudo chmod 755 /usr/local/bin/kalipi-config
+
+================ configuration ==========================
+https://github.com/evilsocket/pwnagotchi/blob/master/pwnagotchi/defaults.toml
+/etc/pwnagotchi/config.toml
+
+ai.laziness = 0.1
+
+main.name = "0x70776e"
+main.lang = "en"
+main.whitelist = [
+  "Neuland",
+  "68:02:b8:3f:b0:ae"
+]
+
+main.plugins.grid.enabled = false
+main.plugins.grid.report = false
+main.plugins.grid.exclude = [
+  "Neuland",
+  "68:02:b8:3f:b0:ae"
+]
+
+main.plugins.bt-tether.enabled = true
+main.plugins.bt-tether.devices.camelphone.enabled = true
+main.plugins.bt-tether.devices.camelphone.search_order = 1
+main.plugins.bt-tether.devices.camelphone.mac = "60:e3:ac:0d:f1:33"
+main.plugins.bt-tether.devices.camelphone.ip = "192.168.44.2"
+main.plugins.bt-tether.devices.camelphone.netmask = 24
+main.plugins.bt-tether.devices.camelphone.interval = 5
+main.plugins.bt-tether.devices.camelphone.scantime = 10
+main.plugins.bt-tether.devices.camelphone.max_tries = 0
+main.plugins.bt-tether.devices.camelphone.share_internet = true
+main.plugins.bt-tether.devices.camelphone.priority = 1
+
+main.plugins.memtemp.enabled = true
+
+main.plugins.auto-update.enabled = false
+
+main.plugins.logtail.enabled = true
+
+main.plugins.webcfg.enabled = true
+
+fs.memory.enabled = true
+fs.memory.mounts.log.enabled = true
+fs.memory.mounts.log.mount = "/var/log"
+fs.memory.mounts.log.size = "50M"
+fs.memory.mounts.log.sync = 60
+fs.memory.mounts.log.zram = true
+fs.memory.mounts.log.rsync = true
+fs.memory.mounts.data.enabled = true
+fs.memory.mounts.data.mount = "/var/tmp/pwnagotchi"
+fs.memory.mounts.data.size = "10M"
+fs.memory.mounts.data.sync = 3600
+fs.memory.mounts.data.zram = false
+fs.memory.mounts.data.rsync = true
+
+ui.display.enabled = false
+
+ui.web.username = "pwnagotchi"
+ui.web.password = "pwnagotchi"
+
+
+================= interfaces ===========================
+---------------- usb-ethernet ---------------------------
+enp0s20u2: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.0.1  netmask 255.255.255.0  broadcast 10.0.0.255
+        inet6 fe80::b929:d885:90b7:8a7d  prefixlen 64  scopeid 0x20<link>
+        ether f6:1c:95:97:34:31  txqueuelen 1000  (Ethernet)
+        RX packets 446  bytes 72032 (70.3 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 798  bytes 86774 (84.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+---------------- bluetooth-hotspot-client -------------
+bnep0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.44.165  netmask 255.255.255.0  broadcast 192.168.44.255
+        inet6 fe80::280d:434f:7025:8a9  prefixlen 64  scopeid 0x20<link>
+        inet6 fe80::d8e:8b5e:40de:f738  prefixlen 64  scopeid 0x20<link>
+        ether 68:17:29:63:c5:d5  txqueuelen 1000  (Ethernet)
+        RX packets 8  bytes 1659 (1.6 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 29  bytes 3410 (3.3 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+---------------- bluetooth-hotspot-phone -------------
+bt-pan: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.44.1  netmask 255.255.255.0  broadcast 192.168.44.255
+        inet6 fe80::62e3:acff:fe0d:f133  prefixlen 64  scopeid 0x20<link>
+        ether 60:e3:ac:0d:f1:33  txqueuelen 500  (Ethernet)
+        RX packets 87  bytes 14766 (14.4 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 60  bytes 9439 (9.2 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+
+
+
+============ random ===================
+sudo pip3 uninstall numpy
+wget http://ftp.de.debian.org/debian/pool/main/n/numpy/python3-numpy_1.21.5-1+b1_armhf.deb
+sudo dpkg -i python3-numpy_1.21.5-1+b1_armhf.deb
+ar x python3-numpy_1.21.5-1+b1_armhf.deb
+tar -xf control.tar.xz
+sudo sh postinst
+# on install/upgrade:
+sudo dpkg -r python3-numpy
+.. stuff ..
+sudo dpkg -i python3-numpy_1.21.5-1+b1_armhf.deb
+
+echo "deb http://raspbian.raspberrypi.org/raspbian/ testing main contrib non-free rpi" | sudo tee -a /etc/apt/sources.list
+echo "APT::Default-Release \"buster\";" | sudo tee -a /etc/apt/apt.conf
+sudo apt remove libgcc-8-dev
+sudo apt -t testing install python3-numpy
