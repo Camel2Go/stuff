@@ -199,8 +199,9 @@ export EDITOR='vim'
 
 alias ls="lsd"
 alias cat="bat"
-alias yeet="yay -Rs"
+alias yeet="yay -Rns"
 alias serve="python3 -m http.server"
+eval $(thefuck --alias)
 
 # enable appindicators
 yay libappindicator-gtk3
