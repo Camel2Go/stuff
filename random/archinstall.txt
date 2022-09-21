@@ -53,6 +53,7 @@ pacman -S
 	cups					# The CUPS Printing System - daemon package
 	zsh						# A very advanced and programmable command interpreter (shell) for UNIX
 	vim						# Vi Improved, a highly configurable, improved version of the vi text editor
+	wget					# Network utility to retrieve files from the Web
 	base-devel				# Basic developement-tools	
 	cmake					# A cross-platform open-source make system
 	git						# the fast distributed version control system
@@ -61,11 +62,26 @@ pacman -S
 	neofetch				# A CLI system information tool written in BASH that supports displaying images.
 	tree					# A directory listing program displaying a depth indented list of files
 	bat						# Cat clone with syntax highlighting and git integration
+	fd						# Simple, fast and user-friendly alternative to find
+	hexyl					# Colored command-line hex viewer
+	fzf						# Command-line fuzzy finder
 	lsd						# Modern ls with a lot of pretty colors and awesome icons
 	plocate 				# Alternative to locate, faster and compatible with mlocate's database.
 	bluez-utils				# Development and debugging utilities for the bluetooth protocol stack
 	pacman-contrib			# ontributed scripts and tools for pacman systems
+	qt5-wayland				# Provides APIs for Wayland
+	thefuck					# Magnificent app which corrects your previous console command
+	zsh-completions 		# Additional completion definitions for Zsh
+	zsh-autosuggestions 	# Fish-like autosuggestions for zsh
+	zsh-syntax-highlighting	# Fish shell like syntax highlighting for Zsh
+	wl-clipboard			# Command-line copy/paste utilities for Wayland
+	pkgfile					# a pacman .files metadata explorer
 
+
+
+
+
+	
 # Time
 ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
@@ -81,10 +97,19 @@ echo "KEYMAP=de-latin1-nodeadkeys" > /etc/vconsole.conf
 echo "Camellaptop" > /etc/hostname
 echo "172.0.0.1		localhost" >> /etc/hosts
 echo "::1			localhost" >> /etc/hosts
-vim /etc/resolved.conf 
-> uncomment "MulticastDNS=yes"
-echo "[connection]" >> /etc/NetworkManager/conf.d/mdns.conf
-echo "connection.mdns=2" >> /etc/NetworkManager/conf.d/mdns.conf
+
+/etc/NetworkManager/NetworkManager.conf
+[ifupdown]
+managed=true
+
+vim /etc/nsswitch.conf
+> hosts: mymachines mdns_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] files myhostname dns mdns
+
+# cups does not support systemd-resolved, rather needs avahi
+(vim /etc/resolved.conf )
+(> uncomment "MulticastDNS=yes")
+(echo "[connection]" >> /etc/NetworkManager/conf.d/mdns.conf)
+(echo "connection.mdns=2" >> /etc/NetworkManager/conf.d/mdns.conf)
 
 # user-config
 passwd
@@ -97,9 +122,6 @@ visudo
 
 # grub
 pacman -S intel-ucode / amd-ucode
-vim /etc/mkinitcpio.conf 
-> MODULES=(i915)
-mkinitcpio -P
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=archlinux
 vim /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -121,7 +143,12 @@ reboot
 # ========= customization ===============
 
 # wallpaper
-# https://repository-images.githubusercontent.com/410301907/3126aefc-c58a-410b-9a85-5fed8ff0000d
+> https://repository-images.githubusercontent.com/410301907/3126aefc-c58a-410b-9a85-5fed8ff0000d
+
+> https://github.com/Jguer/yay
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
 
 # remove some user-dirs
 vim ~/.config/user-dirs.dirs
@@ -134,35 +161,64 @@ vim /etc/pacman.conf
 > uncomment Color
 > uncomment ParallelDownloads = 5
 
-# https://ohmyz.sh
+# update pacman-databases
+pacman -Sy
+pacman -Fy
+pkgfile --update
+
+> https://ohmyz.sh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-vim .zshrc 
-> ZSH_THEME="agnoster"
-> export EDITOR = 'vim'
-> alias ls="lsd"
-> alias cat="bat"
+~/.zshrc 
 
-# https://github.com/Jguer/yay
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
+ZSH_THEME="agnoster"
 
-# https://github.com/ryanoasis/nerd-fonts
+# find plugins installed via pacman
+ZSH_CUSTOM=/usr/share/zsh
+
+# disable folder-background
+export LS_COLORS=$LS_COLORS:'tw=00;33:ow=01;33:'
+
+plugins=(	 
+		adb
+		command-not-found
+		copyfile
+		copypath
+		fzf
+		git
+		sudo
+		wd
+		web-search
+		zsh-autosuggestions
+		zsh-interactive-cd
+		zsh-syntax-highlighting
+)
+
+export EDITOR='vim'
+
+alias ls="lsd"
+alias cat="bat"
+alias yeet="yay -Rs"
+alias serve="python3 -m http.server"
+
+# enable appindicators
+yay libappindicator-gtk3
+
+> https://github.com/ryanoasis/nerd-fonts
 yay nerd-fonts-hack
 
-# https://github.com/EliverLara/candy-icons
+> https://github.com/EliverLara/candy-icons
 yay candy-icons
 
-# https://github.com/nathanroark/tokyo-night-gnome-terminal
+> https://github.com/nathanroark/tokyo-night-gnome-terminal
 > change default theme in any way
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/nathanroark/tokyo-night-gnome-terminal/main/tokyo-night.sh)"
 
-# https://github.com/Fausto-Korpsvart/Tokyo-Night-GTK-Theme
+> https://github.com/Fausto-Korpsvart/Tokyo-Night-GTK-Theme
 unzip -d ~/.themes Tokyonight-Dark-B.zip 
 unzip -d ~/.config/gtk-4.0 Tokyonight-Dark-B-Gnome42.zip
 mv ~/.config/gtk-4.0/Tokyonight-Dark-B.css ~/.config/gtk-4.0/gtk.css
 
-vim ~/.themes/Tokyonight-Dark-B/gnome-shell/gnome-shell.css
+~/.themes/Tokyonight-Dark-B/gnome-shell/gnome-shell.css
 2285:
 #panel {
     > remove margin
@@ -173,11 +229,12 @@ vim ~/.themes/Tokyonight-Dark-B/gnome-shell/gnome-shell.css
 .popup-menu .popup-menu-content {
     margin: 4px 0px 12px;
 }
-vim ~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk.css
+~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk.css
+~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk-dark.css
 > remove "-gtk-icon-source: transparent;"
 
 
-# https://github.com/stronk-dev/Tokyo-Night-Linux
+> https://github.com/stronk-dev/Tokyo-Night-Linux
 yay spotify
 yay spicetify-cli
 mkdir ~/.config/spicetify/Themes/tokionight
@@ -186,23 +243,124 @@ curl -o ~/.config/spicetify/Themes/tokionight/user.css https://github.com/stronk
 
 # extensions
 yay gnome-browser-connector
-# https://extensions.gnome.org/extension/906/sound-output-device-chooser/
-# https://extensions.gnome.org/extension/779/clipboard-indicator/
-# https://extensions.gnome.org/extension/1460/vitals/
-# https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
-# https://extensions.gnome.org/extension/905/refresh-wifi-connections/
-# https://extensions.gnome.org/extension/1010/archlinux-updates-indicator/
-# https://extensions.gnome.org/extension/2917/bring-out-submenu-of-power-offlogout-button/
-# https://extensions.gnome.org/extension/1238/time/
+> https://extensions.gnome.org/extension/906/sound-output-device-chooser/
+> https://extensions.gnome.org/extension/779/clipboard-indicator/
+> https://extensions.gnome.org/extension/1460/vitals/
+> https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
+> https://extensions.gnome.org/extension/905/refresh-wifi-connections/
+> https://extensions.gnome.org/extension/1010/archlinux-updates-indicator/
+> https://extensions.gnome.org/extension/2917/bring-out-submenu-of-power-offlogout-button/
+> https://extensions.gnome.org/extension/1238/time/
+> https://extensions.gnome.org/extension/615/appindicator-support/
 
 gnome-extensions-app
 > enable "Launch new instance"
 > enable "User Themes"
 > Arch Linux Updates Indicator: 
-	> gnome-terminal -- /bin/sh -c "yay" 
+	> gnome-terminal -- /bin/sh -c "yay; read _" 
 
 gnome-tweaks
 > Symbole = "Candy-Icons"
 > Shell = "Tokionight-Dark-B"
 > Veraltete Anwendungen = "Tokionight-Dark-B"
 
+settings -> keyboard-shortcuts -> Fenster wechseln = Alt+Tab
+
+================ GPU - Drivers ===============
+> https://wiki.archlinux.org/title/Hardware_video_acceleration
+
+> https://www.nvidia.com/de-de/geforce/drivers/
+> find driver version (e.g. 515.65)
+yay nvidia
+> install corresponding drivers (extra/nvidia 515.65.01-14)
+
+yay -S nvtop nvidia-settings libva-utils vdpauinfo xdg-desktop-portal-gnome
+yay libva-nvidia-driver
+
+========================= Wayland with Nvidia-Drivers ============================
+> https://wiki.archlinux.org/title/GDM#Wayland_and_the_proprietary_NVIDIA_driver
+> https://download.nvidia.com/XFree86/Linux-x86_64/515.48.07/README/xwayland.html
+
+# add kernel parameter
+/etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet nvidia_drm.modeset=1"
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# add to initramfs (optional)
+/etc/mkinitcpio.conf
+MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)
+sudo mkinitcpio -P
+
+# enable Wayland (optional)
+sudo systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service 
+echo "options nvidia NVreg_PreserveVideoMemoryAllocations=1" | sudo tee /etc/modprobe.d/nvidia-power-management.conf
+
+gsettings set org.gnome.mutter experimental-features '["kms-modifiers"]'
+
+------------------- firefox -----------------------
+https://addons.mozilla.org/de/firefox/addon/h264ify/
+about:config > media.ffmpeg.vaapi.enabled = true
+~/.config/environment.d/envvars.conf
+LIBVA_DRIVER_NAME=nvidia
+MOZ_DISABLE_RDD_SANDBOX=1
+MOZ_ENABLE_WAYLAND=1
+EGL_PLATFORM=wayland
+
+---------------------- OBS -------------------------
+~/.config/environment.d/envvars.conf
+QT_QPA_PLATFORM=wayland
+
+--------------------- Electron ------------------------
+# System-wide
+~/.config/electron-flags.conf
+--ozone-platform-hint=auto
+--enable-features=WaylandWindowDecorations
+(--enable-features=UseOzonePlatform --ozone-platform=wayland)
+(--ignore-gpu-blocklist)
+(--enable-gpu-rasterization)
+
+# Discord
+yay discord_arch_electron 
+~/.config/discord-flags.conf
+
+------------------- Status ---------------
+
+echo $XDG_SESSION_TYPE
+lspci -k | grep -A 2 -E "(VGA|3D)"
+vainfo
+vdpauinfo
+nvtop
+chromium > chrome://gpu/
+firefox > about:support
+MOZ_LOG="PlatformDecoderModule:5" firefox
+
+================= msoffice =====================
+> grab installer (might change user-agent)
+
+/etc/pacman.conf
+> enable multilib
+
+yay -Sy wine wine-mono winetricks samba lib32-gnutls lib32-gst-plugins-base lib32-gst-plugins-good lib32-gstreamer lib32-libcups lib32-libpulse lib32-libxcomposite lib32-libxinerama
+
+mkdir office356
+WINEPREFIX=~/office356 WINEARCH=win32 wineboot -i
+WINEPREFIX=~/office356 WINEARCH=win32 winetricks vcrun2019 msls31 msxml6 riched20 msftedit corefonts calibri allfonts (gdiplus)
+WINEPREFIX=~/office356 WINEARCH=win32 regedit
+> DWORD HKCurrentUser/Software/Wine/Direct2D/max_version_factory = 0
+> DWORD HKCurrentUser/Software/Wine/Direct3D/MaxVersionGL = 30002
+WINEPREFIX=~/office356 WINEARCH=win32 wine OfficeSetup.exe
+cp ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/AppvIsvSubsystems32.dll ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/C2R32.dll ~/office356/drive_c/Program\ Files/Microsoft\ Office/root/Office16
+cp ~/office356/drive_c/Program\ Files/Microsoft\ Office/root/vfs/ProgramFilesCommonX86/Microsoft\ Shared/OFFICE16/MSOXMLMF.DLL ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/msoxmlmf.dll
+
+06c4:err:ole:apartment_add_dll couldn't load in-process dll L"C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX86\\Microsoft Shared\\Office16\\MSOXMLMF.DLL"
+
+WINEPREFIX=~/office356 WINEARCH=win32 wine uninstaller
+
+0658:fixme:propsys:PSRegisterPropertySchema L"C:\\Program Files\\Microsoft Office\\root\\Office16\\Custom.propdesc" stub
+0670:fixme:wevtutil:wmain stub: L"wevtutil.exe" L"im" L"C:\\ProgramData\\Microsoft\\ClickToRun\\{9AC08E99-230B-47e8-9721-4577B7F124EA}\\wordEtw.man" L"/rf:C:\\Program Files\\Microsoft Office\\root\\Office16\\wwlib.dll" L"/mf:C:\\Program Files\\Microsoft Office\\root\\Office16\\wwlib.dll"
+0680:fixme:wevtutil:wmain stub: L"wevtutil.exe" L"im" L"C:\\ProgramData\\Microsoft\\ClickToRun\\{9AC08E99-230B-47e8-9721-4577B7F124EA}\\msoutilstat.etw.man" L"/rf:C:\\Program Files\\Microsoft Office\\root\\Office16\\msoetwres.dll" L"/mf:C:\\Program Files\\Microsoft Office\\root\\Office16\\msoetwres.dll"
+0690:fixme:wevtutil:wmain stub: L"wevtutil.exe" L"im" L"C:\\ProgramData\\Microsoft\\ClickToRun\\{9AC08E99-230B-47e8-9721-4577B7F124EA}\\AirSpace.Etw.man" L"/rf:C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX86\\Microsoft Shared\\Office16\\mso.dll" L"/mf:C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX86\\Microsoft Shared\\Office16\\mso.dll"
+06a0:fixme:wevtutil:wmain stub: L"wevtutil.exe" L"im" L"C:\\ProgramData\\Microsoft\\ClickToRun\\{9AC08E99-230B-47e8-9721-4577B7F124EA}\\wordEtw.man" L"/rf:C:\\Program Files\\Microsoft Office\\root\\Office16\\wwlib.dll" L"/mf:C:\\Program Files\\Microsoft Office\\root\\Office16\\wwlib.dll"
+06b0:fixme:wevtutil:wmain stub: L"wevtutil.exe" L"im" L"C:\\ProgramData\\Microsoft\\ClickToRun\\{9AC08E99-230B-47e8-9721-4577B7F124EA}\\AirSpace.Etw.man" L"/rf:C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX86\\Microsoft Shared\\Office16\\mso.dll" L"/mf:C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX86\\Microsoft Shared\\Office16\\mso.dll"
+
+C:\Program Files\Microsoft Office\Updates\Download\PackageFiles\B61A0176-B542-4FF7-A9F9-FE4EB6FA77DC\root\vfs\ProgramFilesCommonX86\Microsoft Shared\OFFICE16\AppvIsvSubsystems32.dll" L"\\?\C:\Program Files\Common Files\Microsoft Shared\ClickToRun\AppvIsvSubsystems32.dll
