@@ -38,6 +38,7 @@ sudo dietpi-software
 187 Cups
 93 Pi-Hole
 182 Unbound
+167 raspotify
 
 sudo apt install bat locate tree file xz-utils apt-utils
 
@@ -155,13 +156,7 @@ raspi.local
 
 
 ======== raspotify ========
-<> /boot/config.txt
-#-------Onboard sound-----------
-dtparam=audio=on 
-<>
-
-sudo apt install libasound2-plugin-equal
-curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
+sudo dietpi-config -> Audio Options -> Sound card -> iqaudio-dacplus
 
 <> /etc/raspotify/conf
 LIBRESPOT_NAME="Raspi"
@@ -171,37 +166,20 @@ LIBRESPOT_DEVICE="default"
 <>
 
 <> /etc/asound.conf
-pcm.!default {
-  type plug
-  slave.pcm plugequal
-}
-ctl.!default {
-  type hw card 0
-}
 ctl.equal {
-  type equal
+  type equal;
   controls /var/lib/raspotify/.alsaequal.bin
-}
+}       
+
 pcm.plugequal {
-  type equal
-  controls /var/lib/raspotify/.alsaequal.bin
-  slave.pcm "plughw:0,0"
-}
-pcm.equal {
-  type plug
-  slave.pcm plugequal
-}
-<>
+  type equal;
+  (controls /var/lib/raspotify/.alsaequal.bin)
+  slave.pcm "plughw:0,0";
+}       
 
-alsamixer
-
+sudo apt install libasound2-plugin-equal
 sudo alsamixer -D equal
-
-sudo su
-cd /var/lib/raspotify/
-ls -la
-chown 62638:62638 .alsaequal.bin
-
+sudo chmod 666 /var/lib/raspotify/.alsaequal.bin
 
 ======= bluealsa ========
 sudo dietpi-config

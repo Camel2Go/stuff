@@ -78,7 +78,8 @@ pacman -S
 	zsh-syntax-highlighting	# Fish shell like syntax highlighting for Zsh
 	wl-clipboard			# Command-line copy/paste utilities for Wayland
 	pkgfile					# a pacman .files metadata explorer
-
+	seahorse				# GNOME application for managing PGP keys.
+	man-pages				# Linux man pages
 
 
 
@@ -222,11 +223,7 @@ unzip -d ~/.config/gtk-4.0 Tokyonight-Dark-B-Gnome42.zip
 mv ~/.config/gtk-4.0/Tokyonight-Dark-B.css ~/.config/gtk-4.0/gtk.css
 
 ~/.themes/Tokyonight-Dark-B/gnome-shell/gnome-shell.css
-<<<<<<< Updated upstream
 2285:
-=======
-2286:
->>>>>>> Stashed changes
 #panel {
     > remove margin
     border: 0px solid #414868;
@@ -237,10 +234,7 @@ mv ~/.config/gtk-4.0/Tokyonight-Dark-B.css ~/.config/gtk-4.0/gtk.css
     margin: 4px 0px 12px;
 }
 ~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk.css
-<<<<<<< Updated upstream
 ~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk-dark.css
-=======
->>>>>>> Stashed changes
 > remove "-gtk-icon-source: transparent;"
 
 
@@ -345,26 +339,45 @@ firefox > about:support
 MOZ_LOG="PlatformDecoderModule:5" firefox
 
 ================= msoffice =====================
+--------------------- wine ---------------------------
 > grab installer (might change user-agent)
 
 /etc/pacman.conf
 > enable multilib
 
-yay -Sy wine wine-mono winetricks samba lib32-gnutls lib32-gst-plugins-base lib32-gst-plugins-good lib32-gstreamer lib32-libcups lib32-libpulse lib32-libxcomposite lib32-libxinerama
+yay -Sy wine wine-mono winetricks samba 
+lib32-gstreamer lib32-gst-plugins-good lib32-mpg123 lib32-gnutls lib32-gst-plugins-base lib32-gst-plugins-good lib32-gstreamer lib32-libcups lib32-libpulse lib32-libxcomposite lib32-libxinerama
 
 mkdir office356
 WINEPREFIX=~/office356 WINEARCH=win32 wineboot -i
-WINEPREFIX=~/office356 WINEARCH=win32 winetricks vcrun2019 msls31 msxml6 riched20 msftedit corefonts calibri allfonts (gdiplus)
+WINEPREFIX=~/office356 WINEARCH=win32 winecfg
+> Windows 10
+WINEPREFIX=~/office356 WINEARCH=win32 winetricks vcrun2019 msls31 msxml6 riched20 ie8 msftedit corefonts calibri allfonts (gdiplus)
+msxml3 riched30
 WINEPREFIX=~/office356 WINEARCH=win32 regedit
 > DWORD HKCurrentUser/Software/Wine/Direct2D/max_version_factory = 0
 > DWORD HKCurrentUser/Software/Wine/Direct3D/MaxVersionGL = 30002
 WINEPREFIX=~/office356 WINEARCH=win32 wine OfficeSetup.exe
-cp ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/AppvIsvSubsystems32.dll ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/C2R32.dll ~/office356/drive_c/Program\ Files/Microsoft\ Office/root/Office16
-cp ~/office356/drive_c/Program\ Files/Microsoft\ Office/root/vfs/ProgramFilesCommonX86/Microsoft\ Shared/OFFICE16/MSOXMLMF.DLL ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/msoxmlmf.dll
 
-06c4:err:ole:apartment_add_dll couldn't load in-process dll L"C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX86\\Microsoft Shared\\Office16\\MSOXMLMF.DLL"
+cp ~/office356/drive_c/Program\ Files/Microsoft\ Office/Updates/Download/PackageFiles/<RANDOM_ID>/root/Office16/*.dll ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun
+
+cp ~/office356/drive_c/Program\ Files/Microsoft\ Office/Updates/Download/PackageFiles/<RANDOM_ID>/root/vfs/ProgramFilesCommonX86/Microsoft\ Shared/OFFICE16/*.dll ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun
+
+cp ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/*.dll ~/office356/drive_c/Program\ Files/Microsoft\ Office/root/Office16
+
+cp ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/*.dll ~/office356/drive_c/Program\ Files/Microsoft\ Office/root/Client
+
+WINEPREFIX=~/office356 WINEARCH=win32 wine office356/drive_c/Program\ Files/Microsoft\ Office/root/Office16/EXCEL.EXE
 
 WINEPREFIX=~/office356 WINEARCH=win32 wine uninstaller
+
+####
+cp ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/AppvIsvSubsystems32.dll ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/C2R32.dll ~/office356/drive_c/Program\ Files/Microsoft\ Office/root/Office16
+cp ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/AppvIsvSubsystems32.dll ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/C2R32.dll ~/office356/drive_c/Program\ Files/Microsoft\ Office/root/Client
+cp ~/office356/drive_c/Program\ Files/Microsoft\ Office/root/vfs/ProgramFilesCommonX86/Microsoft\ Shared/OFFICE16/MSOXMLMF.DLL ~/office356/drive_c/Program\ Files/Common\ Files/Microsoft\ Shared/ClickToRun/msoxmlmf.dll
+cp office356/drive_c/Program\ Files/Microsoft\ Office/root/Office16/AppvIsvSubsystems32 office356/drive_c/Program\ Files/Microsoft\ Office/root/Office16/AppVIsvSubsystems32.dll
+#####
+
 
 0658:fixme:propsys:PSRegisterPropertySchema L"C:\\Program Files\\Microsoft Office\\root\\Office16\\Custom.propdesc" stub
 0670:fixme:wevtutil:wmain stub: L"wevtutil.exe" L"im" L"C:\\ProgramData\\Microsoft\\ClickToRun\\{9AC08E99-230B-47e8-9721-4577B7F124EA}\\wordEtw.man" L"/rf:C:\\Program Files\\Microsoft Office\\root\\Office16\\wwlib.dll" L"/mf:C:\\Program Files\\Microsoft Office\\root\\Office16\\wwlib.dll"
@@ -374,3 +387,39 @@ WINEPREFIX=~/office356 WINEARCH=win32 wine uninstaller
 06b0:fixme:wevtutil:wmain stub: L"wevtutil.exe" L"im" L"C:\\ProgramData\\Microsoft\\ClickToRun\\{9AC08E99-230B-47e8-9721-4577B7F124EA}\\AirSpace.Etw.man" L"/rf:C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX86\\Microsoft Shared\\Office16\\mso.dll" L"/mf:C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX86\\Microsoft Shared\\Office16\\mso.dll"
 
 C:\Program Files\Microsoft Office\Updates\Download\PackageFiles\B61A0176-B542-4FF7-A9F9-FE4EB6FA77DC\root\vfs\ProgramFilesCommonX86\Microsoft Shared\OFFICE16\AppvIsvSubsystems32.dll" L"\\?\C:\Program Files\Common Files\Microsoft Shared\ClickToRun\AppvIsvSubsystems32.dll
+
+0114:fixme:file:CreateSymbolicLinkW (L"\\\\?\\C:\\Program Files\\Microsoft Office\\Updates\\Download\\PackageFiles\\C96AF108-318B-4A9F-8E5C-662F30714C54\\root\\Office16\\AppvIsvSubsystems32.dll" L"\\\\?\\C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\AppvIsvSubsystems32.dll" 0): stub
+
+
+---------------------------- kvm -------------------------------------
+yay -S qemu libvirt virt-manager edk2-ovmf freerdp2-x11
+yay virtio-win
+virt-manager
+
+https://github.com/Fmstrat/winapps
+! install english-international win10, virtio and office
+! virtio-win-iso > /var/lib/libvirt/images
+
+Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize\AppsUseLightTheme = 0 		# Dark Theme
+Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows\ShutdownWarningDialogTimeout = 1	# Shutdown
+----------- win11 -----------------
+https://www.ctrl.blog/entry/how-to-win11-in-gnome-boxes.html
+yay -S swtpm
+swtpm_setup --create-config-files skip-if-exist
+virsh edit win10
+<os>
+    <type arch="x86_64" machine="pc-q35-7.1">hvm</type>
+	<loader readonly="yes" type="pflash">/usr/share/edk2-ovmf/x64/OVMF_CODE.secboot.fd</loader>
+	...
+</os>
+<devices>
+	<tpm model="tpm-crb">
+    	<backend type="emulator" version="2.0"/>
+    </tpm>
+	...
+</devices>
+
+
+
+
+sudo systemctl start libvirtd.service
