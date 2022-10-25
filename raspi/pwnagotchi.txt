@@ -3,6 +3,18 @@ Name: 0x70776e
 ==================== installation (not working yet, f**ing tensorflow) =================
 # https://pwnagotchi.ai/installation/#installing-on-any-gnu-linux
 
+
+-------------------- kalipi-image -------------
+wpa_passphrase Neuland > wpa_supplicant.conf
+touch ssh
+https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa/+packages
+-> python3.9-distutils python3.9-lib2to3
+
+
+
+
+
+
 ------------------  kalipi ----------------------
 echo "deb http://http.re4son-kernel.com/re4son/ kali-pi main" | sudo tee /etc/apt/sources.list.d/re4son.list
 wget -O - https://re4son-kernel.com/keys/http/archive-key.asc | sudo apt-key add -
@@ -15,13 +27,22 @@ Package: *
 Pin: origin http.re4son-kernel.com
 Pin-Priority: 1001
 <>
+sudo wget -O /usr/local/bin/kalipi-config https://raw.githubusercontent.com/Re4son/RPi-Tweaks/master/kalipi-config/kalipi-config
+sudo chmod 755 /usr/local/bin/kalipi-config
+
 sudo apt update
+
+sudo apt install xz-utils
+wget  -O re4son-kernel_current.tar.xz https://re4son-kernel.com/download/re4son-kernel-current/
+tar -xJf re4son-kernel_current.tar.xz
+cd re4son-kernel_..
+sudo ./install.sh
 
 ================ packages ====================
 -------------- kali ------------
-kalipi-kernel kalipi-bootloader kalipi-re4son-firmware kalipi-kernel-headers libraspberrypi-dev libraspberrypi-doc
+kalipi-kernel kalipi-bootloader kalipi-re4son-firmware libraspberrypi0 libraspberrypi-dev libraspberrypi-doc libraspberrypi-bin
 ------------------ misc ----------------------------
-libpcap0.8 libnetfilter-queue1 git python3 python3-pip 
+libpcap0.8 libnetfilter-queue1 git python3 python3-pip whiptail parted lua5.1 alsa-utils psmisc
 libusb-1.0-0 net-tools
 ---------------- requirements ------------------
 python3-pycryptodome python3-requests python3-yaml python3-scapy python3-scipy python3-tweepy python3-numpy python3-spidev python3-pil python3-flask python3-flask-cors python3-flaskext.wtf python3-dbus python3-toml python3-dateutil python3-websockets
@@ -38,7 +59,7 @@ pip3 install -v --only-binary :all:
 gym==0.14.0
 # scipy==1.3.1
 stable-baselines==2.7.0
-tensorflow==1.13.1
+tensorflow==1.13.1		https://www.tensorflow.org/install/pip#package-location
 tensorflow-estimator==1.14.0
 # tweepy==3.7.0
 file-read-backwards==2.0.0
