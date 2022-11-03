@@ -1,3 +1,4 @@
+from base64 import b64decode
 
 def base16_decode(enc: str) -> str:
     data = [f"{ord(x) - 97:04b}" for x in enc]
@@ -158,3 +159,14 @@ def substitution_decrypt(cipher, alphabet):
     mapping = dict(zip(alphabet.lower(), 'abcdefghijklmnopqrstuvwxyz'))
     mapping.update(dict(zip(alphabet.upper(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')))
     return ''.join([mapping[x] if x.isalpha() else x for x in cipher])
+
+def decode_private_RSA_KEY(file):
+    out = {}
+    key = open(file).readlines()
+    key = b64decode(''.join(key[1:-1]).replace("\n", "")).hex()
+    out["key"] = key
+    key = [key[x:x+2] for x in range(0, len(key), 2)]
+    if not key.pop(0) == '30': return
+    if not key.pop(0) == '82': return
+    out["length"] = ''.join(key.pop(0) + key.pop(0))
+    return out

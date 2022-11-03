@@ -3,18 +3,33 @@ Name: 0x70776e
 ==================== installation (not working yet, f**ing tensorflow) =================
 # https://pwnagotchi.ai/installation/#installing-on-any-gnu-linux
 
-
 -------------------- kalipi-image -------------
 wpa_passphrase Neuland > wpa_supplicant.conf
 touch ssh
 https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa/+packages
 -> python3.9-distutils python3.9-lib2to3
+https://gitlab.com/kalilinux/build-scripts/kali-arm
+./raspberry-pi-zero-w.sh -a armhf -m
+
+https://snapshot.debian.org/package/libpcap/
+https://snapshot.debian.org/archive/debian/20200425T205355Z/pool/main/libp/libpcap/libpcap0.8_1.9.1-4_armhf.deb
 
 
+install python3.7 manually:
+https://ftp.de.debian.org/debian/pool/main/p/python3.7/python3.7-minimal_3.7.3-2+deb10u3_armhf.deb
+http://ftp.de.debian.org/debian/pool/main/p/python3.7/libpython3.7-minimal_3.7.3-2+deb10u3_armhf.deb
 
 
+https://piwheels.org/simple/numpy/numpy-1.21.1-cp37-cp37m-linux_armv6l.whl#sha256=2c6413051a74c317d36f4bac04f61e8d1a6708969cc910d876664c76e36817a7
+https://piwheels.org/simple/tensorflow/tensorflow-1.14.0-cp37-none-linux_armv6l.whl#sha256=9abd359bd907fa9602465f83ae5518d3042fc8096a597aa879176dda627c489c
+tensorflow-estimator==1.14.0
 
+sudo sed -i s/gnueabihf/gnueabi/g /usr/lib/python3.7/_sysconfigdata_m_linux_arm-linux-gnueabi.py
+sudo cp /usr/lib/python3.7/_sysconfigdata_m_linux_arm-linux-gnueabi _sysconfigdata_m_arm-linux-gnueabi
+/usr/local/lib/python3.7/dist-packages:
+for file in $(find -name "*gnueabihf.so"); do sudo mv $file ${file/gnueabihf/gnueabi}; done
 
+sudo python3.7 -m pip install --extra-index-url https://piwheels.org/simple --only-binary :all: tensorflow-1.14.0-cp37-none-linux_armv6l.whl
 ------------------  kalipi ----------------------
 echo "deb http://http.re4son-kernel.com/re4son/ kali-pi main" | sudo tee /etc/apt/sources.list.d/re4son.list
 wget -O - https://re4son-kernel.com/keys/http/archive-key.asc | sudo apt-key add -
@@ -40,9 +55,15 @@ sudo ./install.sh
 
 ================ packages ====================
 -------------- kali ------------
+<<<<<<< HEAD
 kalipi-kernel kalipi-bootloader kalipi-re4son-firmware libraspberrypi0 libraspberrypi-dev libraspberrypi-doc libraspberrypi-bin
 ------------------ misc ----------------------------
 libpcap0.8 libnetfilter-queue1 git python3 python3-pip whiptail parted lua5.1 alsa-utils psmisc
+=======
+kalipi-kernel kalipi-bootloader kalipi-re4son-firmware
+------------------ misc ----------------------------
+libpcap0.8 libnetfilter-queue1 libatlas-base-dev git python3 python3-pip 
+>>>>>>> 855e59b (idk)
 libusb-1.0-0 net-tools
 ---------------- requirements ------------------
 python3-pycryptodome python3-requests python3-yaml python3-scapy python3-scipy python3-tweepy python3-numpy python3-spidev python3-pil python3-flask python3-flask-cors python3-flaskext.wtf python3-dbus python3-toml python3-dateutil python3-websockets
@@ -52,6 +73,7 @@ sudo apt edit-sources
 sudo apt install python3-gast python3-smbus2
 ---------------  pip3 ---------------
 pip3 install -v --only-binary :all:
+gym stable-baselines tensorflow tensorflow-estimator tweepy file-read-backwards numpy inky smbus2 Pillow spidev gast flask flask-cors flask-wtf dbus-python toml python-dateutil websockets
 # pycryptodome==3.9.4
 # requests==2.21.0
 # PyYAML==5.3.1
@@ -60,6 +82,7 @@ gym==0.14.0
 # scipy==1.3.1
 stable-baselines==2.7.0
 tensorflow==1.13.1		https://www.tensorflow.org/install/pip#package-location
+tensorflow==1.13.1                     https://www.piwheels.org/project/tensorflow/
 tensorflow-estimator==1.14.0
 # tweepy==3.7.0
 file-read-backwards==2.0.0
