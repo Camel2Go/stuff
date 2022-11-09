@@ -3,50 +3,47 @@ Name: 0x70776e
 ==================== installation (not working yet, f**ing tensorflow) =================
 # https://pwnagotchi.ai/installation/#installing-on-any-gnu-linux
 
--------------------- kalipi-image -------------
-wpa_passphrase Neuland > wpa_supplicant.conf
+-------------------- image -------------
 touch ssh
-https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa/+packages
--> python3.9-distutils python3.9-lib2to3
-https://gitlab.com/kalilinux/build-scripts/kali-arm
-./raspberry-pi-zero-w.sh -a armhf -m
+openssl passwd --6
+echo "<username:passwd>" > userconf.txt
+cat > wpa_supplicant.conf
+<>
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+country=DE
+update_config=1
+<>
+wpa_passphrase "Neuland" >> wpa_supplicant.conf
 
-https://snapshot.debian.org/package/libpcap/
-https://snapshot.debian.org/archive/debian/20200425T205355Z/pool/main/libp/libpcap/libpcap0.8_1.9.1-4_armhf.deb
-
-
-install python3.7 manually:
-https://ftp.de.debian.org/debian/pool/main/p/python3.7/python3.7-minimal_3.7.3-2+deb10u3_armhf.deb
-http://ftp.de.debian.org/debian/pool/main/p/python3.7/libpython3.7-minimal_3.7.3-2+deb10u3_armhf.deb
-
-
-https://piwheels.org/simple/numpy/numpy-1.21.1-cp37-cp37m-linux_armv6l.whl#sha256=2c6413051a74c317d36f4bac04f61e8d1a6708969cc910d876664c76e36817a7
-https://piwheels.org/simple/tensorflow/tensorflow-1.14.0-cp37-none-linux_armv6l.whl#sha256=9abd359bd907fa9602465f83ae5518d3042fc8096a597aa879176dda627c489c
-tensorflow-estimator==1.14.0
-
-sudo sed -i s/gnueabihf/gnueabi/g /usr/lib/python3.7/_sysconfigdata_m_linux_arm-linux-gnueabi.py
-sudo cp /usr/lib/python3.7/_sysconfigdata_m_linux_arm-linux-gnueabi _sysconfigdata_m_arm-linux-gnueabi
-/usr/local/lib/python3.7/dist-packages:
-for file in $(find -name "*gnueabihf.so"); do sudo mv $file ${file/gnueabihf/gnueabi}; done
+------------------ misc ----------------------------
+sudo apt install git python3-pip plocate net-tools libatlas-base-dev whiptail parted lua5.1 alsa-utils psmisc libnetfilter-queue1 libpcap0.8=1.8.1-6+deb10u1 libusb-1.0-0 libopenjp2-7
+sudo updatedb 
 
 sudo python3.7 -m pip install --extra-index-url https://piwheels.org/simple --only-binary :all: tensorflow-1.14.0-cp37-none-linux_armv6l.whl
 ------------------  kalipi ----------------------
+# echo "deb http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee /etc/apt/sources.list.d/kali.list
+# sudo apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-key ED444FF07D8D0BF6
+
 echo "deb http://http.re4son-kernel.com/re4son/ kali-pi main" | sudo tee /etc/apt/sources.list.d/re4son.list
-wget -O - https://re4son-kernel.com/keys/http/archive-key.asc | sudo apt-key add -
-get expired key from https://keyserver.ubuntu.com
-https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x11764ee8ac24832f
-sudo apt-key add kali.key
-/etc/apt/preferences
+sudo apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-key 11764EE8AC24832F
+sudo nano /etc/apt/preferences
 <>
 Package: *
 Pin: origin http.re4son-kernel.com
 Pin-Priority: 1001
 <>
+sudo apt update && sudo apt upgrade -y
+sudo apt remove vcdbg
+sudo apt install kalipi-kernel kalipi-bootloader kalipi-re4son-firmware kalipi-kernel-headers libraspberrypi0 libraspberrypi-dev libraspberrypi-doc libraspberrypi-bin 
 sudo wget -O /usr/local/bin/kalipi-config https://raw.githubusercontent.com/Re4son/RPi-Tweaks/master/kalipi-config/kalipi-config
 sudo chmod 755 /usr/local/bin/kalipi-config
 
-sudo apt update
+----------------- python3.7 --------------------
+https://packages.debian.org/search?keywords=python3.7
+echo "deb http://raspbian.raspberrypi.org/raspbian/ buster main" | sudo tee /etc/apt/sources.list.d/buster.list
+sudo apt install python3.7
 
+<<<<<<< HEAD
 sudo apt install xz-utils
 wget  -O re4son-kernel_current.tar.xz https://re4son-kernel.com/download/re4son-kernel-current/
 tar -xJf re4son-kernel_current.tar.xz
@@ -102,14 +99,35 @@ inky==1.2.0
 
 
 python3-opencv python3-pandas python3-joblib python3-importlib-metadata python3-cloudpickle python3-zipp
+=======
+---------------- requirements ------------------
+wget http://ftp.de.debian.org/debian/pool/main/s/smbus2/python3-smbus2_0.4.2-1_armhf.deb
+wget http://ftp.de.debian.org/debian/pool/main/p/python-gast/python3-gast_0.5.2-2_all.deb
+wget https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa/+files/python3.7-distutils_3.7.15-1+focal1_all.deb
+wget https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa/+files/python3.7-lib2to3_3.7.15-1+focal1_all.deb
+sudo apt install ./*.deb
+sudo cp /usr/lib/python3.7/_sysconfigdata_m_linux_arm-linux-gnueabihf.py /usr/lib/python3.7/_sysconfigdata_m_arm-linux-gnueabihf.py
+sudo apt install python3-requests python3-yaml python3-scapy python3-scipy python3-tweepy python3-spidev python3-flask python3-flask-cors python3-flaskext.wtf python3-toml python3-dateutil python3-websockets python3-pandas python3-joblib python3-matplotlib python3-opencv python3-cloudpickle python3-pyglet python3-fonttools python3-pyparsing python3-packaging python3-cycler python3-kiwisolver 
+sudo python3.7 -m pip install --force --only-binary :all: pollow dbus-python
+>>>>>>> 9fba448 (idk)
 
+-------------------- tensorflow ----------------------
+https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.4.0/tensorflow-2.4.0-cp37-none-linux_armv6l.whl
+https://storage.googleapis.com/tensorflow/raspberrypi/tensorflow-2.3.0-cp35-none-linux_armv6l.whl
+https://www.piwheels.org/simple/tensorflow/tensorflow-1.14.0-cp37-none-linux_armv6l.whl#sha256=9abd359bd907fa9602465f83ae5518d3042fc8096a597aa879176dda627c489c
+sudo python3.7 -m pip install --only-binary :all: https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.4.0/tensorflow-2.4.0-cp37-none-linux_armv6l.whl
 
 -------------- evilsocket ------------------
 https://github.com/bettercap/bettercap/releases
 https://github.com/evilsocket/pwngrid/releases
 https://github.com/evilsocket/pwnagotchi.git
 
+sed -i s/==.*// requirements.txt
+sudo python3.7 -m pip install --only-binary :all: .
 sudo systemctl enable bettercap.service pwngrid-peer.service
+sudo chmod +x /usr/bin/bettercap-launcher
+sudo chmod +x /usr/bin/pwngrid
+sudo chmod +x /usr/bin/monstart
 
 
 ============== setup ================
