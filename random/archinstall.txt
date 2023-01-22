@@ -203,7 +203,6 @@ export EDITOR='vim'
 alias ls="lsd"
 alias cat="bat"
 alias yeet="yay -Rns"
-alias serve="python3 -m http.server"
 eval $(thefuck --alias)
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
@@ -278,18 +277,18 @@ gnome-tweaks
 
 settings -> keyboard-shortcuts -> Fenster wechseln = Alt+Tab
 
-================ GPU - Drivers ===============
+
+================ Drivers/Wayland ===============
 > https://wiki.archlinux.org/title/Hardware_video_acceleration
 
+---------------------- Nvidia -------------------
 > https://www.nvidia.com/de-de/geforce/drivers/
 > find driver version (e.g. 515.65)
 yay nvidia
 > install corresponding drivers (extra/nvidia 515.65.01-14)
-
 yay -S nvtop nvidia-settings libva-utils vdpauinfo xdg-desktop-portal-gnome
 yay libva-nvidia-driver
 
-========================= Wayland with Nvidia-Drivers ============================
 > https://wiki.archlinux.org/title/GDM#Wayland_and_the_proprietary_NVIDIA_driver
 > https://download.nvidia.com/XFree86/Linux-x86_64/515.48.07/README/xwayland.html
 
@@ -309,34 +308,34 @@ echo "options nvidia NVreg_PreserveVideoMemoryAllocations=1" | sudo tee /etc/mod
 
 gsettings set org.gnome.mutter experimental-features '["kms-modifiers"]'
 
-------------------- firefox -----------------------
-https://addons.mozilla.org/de/firefox/addon/h264ify/
-about:config > media.ffmpeg.vaapi.enabled = true
+--------------- Radeon ---------------
+yay -S libva-mesa-driver mesa-vdpau radeontop rocm-opencl-runtime amdvlk lib32-amdvlk
+
+
+-------------- Wayland --------------
 ~/.config/environment.d/envvars.conf
-LIBVA_DRIVER_NAME=nvidia
-MOZ_DISABLE_RDD_SANDBOX=1
+LIBVA_DRIVER_NAME=radeonsi
+VDPAU_DRIVER=radeonsi
+#MOZ_DISABLE_RDD_SANDBOX=1
 MOZ_ENABLE_WAYLAND=1
 EGL_PLATFORM=wayland
-
----------------------- OBS -------------------------
-~/.config/environment.d/envvars.conf
 QT_QPA_PLATFORM=wayland
 
---------------------- Electron ------------------------
-# System-wide
-~/.config/electron-flags.conf
+about:config > media.ffmpeg.vaapi.enabled = true
+
+yay discord_arch_electron 
+https://github.com/NixOS/nixpkgs/issues/195512#issuecomment-1320781446
+
+(~/.config/electron-flags.conf)
+~/.config/discord-flags.conf
 --ozone-platform-hint=auto
 --enable-features=WaylandWindowDecorations
-(--enable-features=UseOzonePlatform --ozone-platform=wayland)
-(--ignore-gpu-blocklist)
-(--enable-gpu-rasterization)
+--enable-features=UseOzonePlatform 
+--ignore-gpu-blocklist
+--enable-gpu-rasterization
 
-# Discord
-yay discord_arch_electron 
-~/.config/discord-flags.conf
 
-------------------- Status ---------------
-
+--------------- status --------------------------
 echo $XDG_SESSION_TYPE
 lspci -k | grep -A 2 -E "(VGA|3D)"
 vainfo
@@ -345,6 +344,8 @@ nvtop
 chromium > chrome://gpu/
 firefox > about:support
 MOZ_LOG="PlatformDecoderModule:5" firefox
+
+
 
 ================= msoffice =====================
 --------------------- wine ---------------------------

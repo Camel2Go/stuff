@@ -1,0 +1,83 @@
+% This is the RIPE Database query service.
+% The objects are in RPSL format.
+%
+% The RIPE Database is subject to Terms and Conditions.
+% See http://www.ripe.net/db/support/db-terms-conditions.pdf
+
+% Note: this output has been filtered.
+%       To receive output for a database update, use the "-B" flag.
+
+% Information related to '88.79.156.128 - 88.79.156.191'
+
+% Abuse contact for '88.79.156.128 - 88.79.156.191' is 'abuse.de@vodafone.com'
+
+inetnum:        88.79.156.128 - 88.79.156.191
+netname:        MEDIACON-NET
+descr:          Media Construct GmbH
+descr:          August-Bebel-Str. 15
+descr:          D-01219 Dresden
+descr:          GERMANY
+country:        DE
+admin-c:        JW2004-RIPE
+tech-c:         ANOC1-RIPE
+status:         ASSIGNED PA
+mnt-by:         ARCOR-MNT
+created:        2010-01-04T14:06:45Z
+last-modified:  2010-01-04T14:06:45Z
+source:         RIPE # Filtered
+
+role:           Vodafone Germany IP Core Backbone
+address:        Vodafone GmbH
+address:        Campus Eschborn
+address:        Duesseldorfer Strasse 15
+address:        D-65760 Eschborn
+address:        Germany
+phone:          +49 6196 523 0864
+remarks:        trouble: Security issues abuse.de@vodafone.com
+remarks:        trouble: Information http://www.vodafone.de
+remarks:        trouble: Peering contact peering@adm.arcor.net
+remarks:        trouble: Operational issues :
+remarks:        DanubiusNOC-DE-FO-FIXED_ro@vodafone.com
+remarks:        trouble: Address assignment ip-registry@arcor.net
+admin-c:        SM9000-RIPE
+admin-c:        NH4266-RIPE
+admin-c:        JS19072-RIPE
+admin-c:        IE1226-RIPE
+admin-c:        TK11590-RIPE
+admin-c:        MW877-RIPE
+admin-c:        FB3293-RIPE
+admin-c:        TG2269-RIPE
+tech-c:         NH15-RIPE
+nic-hdl:        ANOC1-RIPE
+mnt-by:         ARCOR-MNT
+created:        2002-07-11T08:48:33Z
+last-modified:  2021-07-15T06:28:08Z
+source:         RIPE # Filtered
+abuse-mailbox:  abuse.de@vodafone.com
+
+person:         Jens Walcak
+address:        Media Construct GmbH
+address:        Lohrmannstrasse 25
+address:        01237 Dresden
+address:        Germany
+phone:          +49 351 8771928
+fax-no:         +49 351 8771931
+mnt-by:         ARCOR-MNT
+nic-hdl:        JW2004-RIPE
+created:        2005-05-12T12:37:27Z
+last-modified:  2005-05-12T12:37:27Z
+source:         RIPE # Filtered
+
+% Information related to '88.79.0.0/16AS3209'
+
+route:          88.79.0.0/16
+descr:          ARCOR-IP
+origin:         AS3209
+mnt-by:         ARCOR-MNT
+created:        2009-05-18T07:33:25Z
+last-modified:  2009-05-18T07:33:25Z
+source:         RIPE
+
+% This query was served by the RIPE Database Query Service version 1.105 (BUSA)
+
+

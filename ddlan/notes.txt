@@ -1,0 +1,44 @@
+www.ddlan.de.		3600	IN	A	88.79.156.133
+ddlan.de.			300		IN	SOA	217.160.81.91
+www.mcdd.de.		3600	IN	A	217.160.0.252
+mcdd.de.			3600	IN	A	217.160.0.252
+www.canaletto.net.	3600	IN	CNAME	canaletto.net.
+canaletto.net.		3600	IN	A	212.80.228.22
+
+
+ddlan.de				-> 88.79.156.133
+canaletto-personal		-> 88.79.156.131
+mcdd rdp/exchange		-> 212.80.228.14
+www.canaletto.net		-> 212.80.228.22
+mcdd.de 				-> 217.160.0.252 -> http://88.79.156.131/mcdd.de
+
+
+www.ddlan.de: 	GET	http://www.bluenetdesign.de/cgi-bin/counter.pl?member=994156752
+
+http://www.ddlan.de/NewUserForm.asp?SO=DDLAN
+ISSB.AdoDBCom.1 Fehler "80004005'
+Fehler 0x80004005 beim Öffnen der DB-Verbindung! Unbekannter Fehler [Microsoft][ODBC Microsoft Access Driver]Allgemeiner Fehler Registrierungsschlüssel 'Temporary (volatile) Jet DSN for process 0x8a8 Thread 0xe48 DBC 0x1909f74 Jet' kann nicht geöffnet werden. Fehler: 0x80004005 [Microsoft][ODBC Microsoft Access Driver]Allgemeiner Fehler Registrierungsschlüssel 'Temporary (volatile) Jet DSN for process 0x8a8 Thread 0xe48 DBC 0x1909f74 Jet' kann nicht geöffnet werden. Fehler: 0x80004005 [Microsoft][ODBC Driver Manager] Fehler bei SQLSetConnectAttr-Aufruf für Treiber Fehler: 0x80004005 [Microsoft][ODBC Microsoft Access Driver]Allgemeiner Fehler Registrierungsschlüssel 'Temporary (volatile) Jet DSN for process 0x8a8 Thread 0xe48 DBC 0x1909f74 Jet' kann nicht geöffnet werden. Fehler: 0x80004005 [Microsoft][ODBC Microsoft Access Driver] Datei '(unbekannt)' nicht gefunden.
+/NewUserForm.asp, line 25 
+
+
+
+212.80.228.0 - 212.80.229.127
+www.canaletto.net
+Canaletto Internet GmbH
+ein Unternehmen der PRODATIS Gruppe
+Canaletto Internet GmbH	Georg-Treu-Platz 3, 01067 Dresden
+Jan Riedel				Landhausstraße 8, 01067 Dresden, fon 070022625388, fax 03512590946
+Daniel Taborek			Comeniusstr. 109, 01309 Dresden, fon +49351259090, fax +493512590946
+Robert Doberstein		Comeniusstr. 109, 01309 Dresden, fon +49351259090, fax +493512590946
+
+
+88.79.156.128 - 88.79.156.191 (88.79.156.128/26)
+www.mcdd.de / canaletto-personal
+Media Construct GmbH	August-Bebel-Str. 15, 01219 Dresden
+media construct gmbh	Kipsdorfer Str. 100, 01277 Dresden, fon +493518771930, fax +493518771931
+Jens Walcak				Lohrmannstrasse 25, 01237 Dresden, fon +493518771928, fax +493518771931
+
+
+217.160.0.0 - 217.160.1.255
+netname:        IONOS-CUSTOMERS
+descr:          1&1 IONOS SE

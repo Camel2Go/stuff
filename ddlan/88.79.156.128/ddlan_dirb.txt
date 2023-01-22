@@ -1,0 +1,118 @@
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+OUTPUT_FILE: dirb.txt
+START_TIME: Tue Jan 17 18:03:03 2023
+URL_BASE: http://www.ddlan.de/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+SPEED_DELAY: 10 miliseconds
+
+-----------------
+
+GENERATED WORDS: 4612
+
+---- Scanning URL: http://www.ddlan.de/ ----
++ http://www.ddlan.de/_private (CODE:403|SIZE:1778)
+==> DIRECTORY: http://www.ddlan.de/_styles/
+==> DIRECTORY: http://www.ddlan.de/_vti_bin/
++ http://www.ddlan.de/_vti_bin/_vti_adm/admin.dll (CODE:200|SIZE:204)
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+OUTPUT_FILE: dirb.txt
+START_TIME: Tue Jan 17 18:03:08 2023
+URL_BASE: http://www.ddlan.de/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+SPEED_DELAY: 100 miliseconds
+
+-----------------
+
+GENERATED WORDS: 4612
+
+---- Scanning URL: http://www.ddlan.de/ ----
++ http://www.ddlan.de/_private (CODE:403|SIZE:1778)
+==> DIRECTORY: http://www.ddlan.de/_styles/
+==> DIRECTORY: http://www.ddlan.de/_vti_bin/
++ http://www.ddlan.de/_vti_bin/_vti_adm/admin.dll (CODE:200|SIZE:204)
++ http://www.ddlan.de/_vti_bin/_vti_aut/author.dll (CODE:200|SIZE:204)
++ http://www.ddlan.de/_vti_bin/shtml.dll (CODE:200|SIZE:227)
+==> DIRECTORY: http://www.ddlan.de/_vti_cnf/
++ http://www.ddlan.de/_vti_log (CODE:403|SIZE:1778)
++ http://www.ddlan.de/_vti_pvt (CODE:403|SIZE:1778)
+==> DIRECTORY: http://www.ddlan.de/_vti_script/
++ http://www.ddlan.de/_vti_txt (CODE:403|SIZE:1778)
++ http://www.ddlan.de/aspnet_client (CODE:403|SIZE:255)
++ http://www.ddlan.de/global.asa (CODE:500|SIZE:2018)
+==> DIRECTORY: http://www.ddlan.de/icons/
+==> DIRECTORY: http://www.ddlan.de/images/
+==> DIRECTORY: http://www.ddlan.de/Images/
++ http://www.ddlan.de/index.htm (CODE:200|SIZE:1153)
+==> DIRECTORY: http://www.ddlan.de/manual/
+==> DIRECTORY: http://www.ddlan.de/o/
+==> DIRECTORY: http://www.ddlan.de/O/
++ http://www.ddlan.de/clips (CODE:503|SIZE:28)
++ http://www.ddlan.de/clk (CODE:503|SIZE:28)
++ http://www.ddlan.de/clock (CODE:503|SIZE:28)
++ http://www.ddlan.de/close (CODE:503|SIZE:28)
++ http://www.ddlan.de/closed (CODE:503|SIZE:28)
++ http://www.ddlan.de/closing (CODE:503|SIZE:28)
++ http://www.ddlan.de/club (CODE:503|SIZE:28)
++ http://www.ddlan.de/cluster (CODE:503|SIZE:28)
++ http://www.ddlan.de/clusters (CODE:503|SIZE:28)
++ http://www.ddlan.de/cm (CODE:503|SIZE:28)
++ http://www.ddlan.de/cmd (CODE:503|SIZE:28)
++ http://www.ddlan.de/cmpi_popup (CODE:503|SIZE:28)
++ http://www.ddlan.de/cms (CODE:503|SIZE:28)
++ http://www.ddlan.de/CMS (CODE:503|SIZE:28)
++ http://www.ddlan.de/cmsadmin (CODE:503|SIZE:28)
++ http://www.ddlan.de/cn (CODE:503|SIZE:28)
++ http://www.ddlan.de/cnf (CODE:503|SIZE:28)
+
+---- Entering directory: http://www.ddlan.de/_styles/ ----
+==> DIRECTORY: http://www.ddlan.de/_styles/_vti_cnf/
+
+---- Entering directory: http://www.ddlan.de/_vti_bin/ ----
+==> DIRECTORY: http://www.ddlan.de/_vti_bin/_vti_aut/
+
+---- Entering directory: http://www.ddlan.de/_vti_cnf/ ----
+(!) WARNING: All responses for this directory seem to be CODE = 500.
+    (Use mode '-w' if you want to scan it anyway)
+
+---- Entering directory: http://www.ddlan.de/_vti_script/ ----
+
+---- Entering directory: http://www.ddlan.de/icons/ ----
+==> DIRECTORY: http://www.ddlan.de/icons/_vti_cnf/
+
+---- Entering directory: http://www.ddlan.de/images/ ----
+==> DIRECTORY: http://www.ddlan.de/images/_vti_cnf/
+==> DIRECTORY: http://www.ddlan.de/images/ap/
+
+---- Entering directory: http://www.ddlan.de/Images/ ----
+==> DIRECTORY: http://www.ddlan.de/Images/_vti_cnf/
+==> DIRECTORY: http://www.ddlan.de/Images/ap/
++ http://www.ddlan.de/Images/calendars (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/calender (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/call (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/callback (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/callee (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/caller (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/callin (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/calling (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/callout (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/cam (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/camel (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/campaign (CODE:503|SIZE:28)
++ http://www.ddlan.de/Images/campaigns (CODE:503|SIZE:28)
+
+(!) FATAL: Too many errors connecting to host
+    (Possible cause: COULDNT CONNECT)
+
+-----------------
+END_TIME: Tue Jan 17 19:01:32 2023
+DOWNLOADED: 28525 - FOUND: 23
