@@ -1,12 +1,17 @@
 Name: 0x70776e
 
-==================== installation (not working yet, f**ing tensorflow) =================
+
+LD_LIBRARY_PATH=/opt/vc/lib python3.7 -c 'import cv2'
+
+
+==================== installation =================
 # https://pwnagotchi.ai/installation/#installing-on-any-gnu-linux
 
 -------------------- image -------------
 touch ssh
 openssl passwd --6
-echo "<username:passwd>" > userconf.txt
+echo "<username:passwd>" > userconf
+(-> might change password directly in /etc/shadow)
 cat > wpa_supplicant.conf
 <>
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -14,12 +19,8 @@ country=DE
 update_config=1
 <>
 wpa_passphrase "Neuland" >> wpa_supplicant.conf
+nano wpa_supplicant.conf
 
------------------- misc ----------------------------
-sudo apt install git python3-pip plocate net-tools libatlas-base-dev whiptail parted lua5.1 alsa-utils psmisc libnetfilter-queue1 libpcap0.8=1.8.1-6+deb10u1 libusb-1.0-0 libopenjp2-7
-sudo updatedb 
-
-sudo python3.7 -m pip install --extra-index-url https://piwheels.org/simple --only-binary :all: tensorflow-1.14.0-cp37-none-linux_armv6l.whl
 ------------------  kalipi ----------------------
 # echo "deb http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee /etc/apt/sources.list.d/kali.list
 # sudo apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-key ED444FF07D8D0BF6
@@ -32,106 +33,88 @@ Package: *
 Pin: origin http.re4son-kernel.com
 Pin-Priority: 1001
 <>
+
+-------------- kali ------------
 sudo apt update && sudo apt upgrade -y
+sudo apt autoremove
 sudo apt remove vcdbg
 sudo apt install kalipi-kernel kalipi-bootloader kalipi-re4son-firmware kalipi-kernel-headers libraspberrypi0 libraspberrypi-dev libraspberrypi-doc libraspberrypi-bin 
+(sudo rm /lib/firmware/brcm/brcmfmac43430-sdio.clm_blob)
+
+----------- install kalipi-config (optional) ----------------
 sudo wget -O /usr/local/bin/kalipi-config https://raw.githubusercontent.com/Re4son/RPi-Tweaks/master/kalipi-config/kalipi-config
 sudo chmod 755 /usr/local/bin/kalipi-config
+
+------------------ misc ----------------------------
+sudo apt install git plocate net-tools libatlas-base-dev whiptail parted lua5.1 alsa-utils psmisc libnetfilter-queue1 libpcap0.8 libusb-1.0-0 libopenjp2-7 libavcodec58 libavformat58 libswscale5 libgtk-3-0
+(libhdfs3) libhdf3-dev libhdf5-dev
+sudo updatedb 
 
 ----------------- python3.7 --------------------
 https://packages.debian.org/search?keywords=python3.7
 echo "deb http://raspbian.raspberrypi.org/raspbian/ buster main" | sudo tee /etc/apt/sources.list.d/buster.list
-sudo apt install python3.7
-
-<<<<<<< HEAD
-sudo apt install xz-utils
-wget  -O re4son-kernel_current.tar.xz https://re4son-kernel.com/download/re4son-kernel-current/
-tar -xJf re4son-kernel_current.tar.xz
-cd re4son-kernel_..
-sudo ./install.sh
-
-================ packages ====================
--------------- kali ------------
-<<<<<<< HEAD
-kalipi-kernel kalipi-bootloader kalipi-re4son-firmware libraspberrypi0 libraspberrypi-dev libraspberrypi-doc libraspberrypi-bin
------------------- misc ----------------------------
-libpcap0.8 libnetfilter-queue1 git python3 python3-pip whiptail parted lua5.1 alsa-utils psmisc
-=======
-kalipi-kernel kalipi-bootloader kalipi-re4son-firmware
------------------- misc ----------------------------
-libpcap0.8 libnetfilter-queue1 libatlas-base-dev git python3 python3-pip 
->>>>>>> 855e59b (idk)
-libusb-1.0-0 net-tools
----------------- requirements ------------------
-python3-pycryptodome python3-requests python3-yaml python3-scapy python3-scipy python3-tweepy python3-numpy python3-spidev python3-pil python3-flask python3-flask-cors python3-flaskext.wtf python3-dbus python3-toml python3-dateutil python3-websockets
----------------- unstable ---------------
-sudo apt edit-sources
-> add "deb http://raspbian.raspberrypi.org/raspbian/ testing main contrib non-free rpi"
-sudo apt install python3-gast python3-smbus2
----------------  pip3 ---------------
-pip3 install -v --only-binary :all:
-gym stable-baselines tensorflow tensorflow-estimator tweepy file-read-backwards numpy inky smbus2 Pillow spidev gast flask flask-cors flask-wtf dbus-python toml python-dateutil websockets
-# pycryptodome==3.9.4
-# requests==2.21.0
-# PyYAML==5.3.1
-# scapy==2.4.3
-gym==0.14.0
-# scipy==1.3.1
-stable-baselines==2.7.0
-tensorflow==1.13.1		https://www.tensorflow.org/install/pip#package-location
-tensorflow==1.13.1                     https://www.piwheels.org/project/tensorflow/
-tensorflow-estimator==1.14.0
-# tweepy==3.7.0
-file-read-backwards==2.0.0
-#numpy==1.20.2
-inky==1.2.0
-#smbus2==0.3.0
-#Pillow==5.4.1
-#spidev==3.4
-#gast==0.2.2
-#flask-wtf==0.14.3
-#flask==1.0.2
-#flask-cors==3.0.7
-#dbus-python==1.2.12
-#toml==0.10.0
-#python-dateutil==2.8.1
-#websockets==8.1
-
-
-python3-opencv python3-pandas python3-joblib python3-importlib-metadata python3-cloudpickle python3-zipp
-=======
----------------- requirements ------------------
-wget http://ftp.de.debian.org/debian/pool/main/s/smbus2/python3-smbus2_0.4.2-1_armhf.deb
-wget http://ftp.de.debian.org/debian/pool/main/p/python-gast/python3-gast_0.5.2-2_all.deb
-wget https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa/+files/python3.7-distutils_3.7.15-1+focal1_all.deb
-wget https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa/+files/python3.7-lib2to3_3.7.15-1+focal1_all.deb
-sudo apt install ./*.deb
-sudo cp /usr/lib/python3.7/_sysconfigdata_m_linux_arm-linux-gnueabihf.py /usr/lib/python3.7/_sysconfigdata_m_arm-linux-gnueabihf.py
-sudo apt install python3-requests python3-yaml python3-scapy python3-scipy python3-tweepy python3-spidev python3-flask python3-flask-cors python3-flaskext.wtf python3-toml python3-dateutil python3-websockets python3-pandas python3-joblib python3-matplotlib python3-opencv python3-cloudpickle python3-pyglet python3-fonttools python3-pyparsing python3-packaging python3-cycler python3-kiwisolver 
-sudo python3.7 -m pip install --force --only-binary :all: pollow dbus-python
->>>>>>> 9fba448 (idk)
+sudo apt install python3.7 python3-pip python3-distutils/oldstable
 
 -------------------- tensorflow ----------------------
 https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.4.0/tensorflow-2.4.0-cp37-none-linux_armv6l.whl
 https://storage.googleapis.com/tensorflow/raspberrypi/tensorflow-2.3.0-cp35-none-linux_armv6l.whl
-https://www.piwheels.org/simple/tensorflow/tensorflow-1.14.0-cp37-none-linux_armv6l.whl#sha256=9abd359bd907fa9602465f83ae5518d3042fc8096a597aa879176dda627c489c
-sudo python3.7 -m pip install --only-binary :all: https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.4.0/tensorflow-2.4.0-cp37-none-linux_armv6l.whl
+https://piwheels.org/simple/tensorflow/tensorflow-1.13.1-cp37-none-linux_armv6l.whl#sha256=3aad2c162168a62adae30e226bcddfef74e5db1ca98bec1383958fb580e67123
+https://piwheels.org/simple/tensorflow/tensorflow-1.14.0-cp37-none-linux_armv6l.whl#sha256=9abd359bd907fa9602465f83ae5518d3042fc8096a597aa879176dda627c489c
+sudo python3.7 -m pip install --only-binary :all: tensorflow==1.13.1
+(sudo python3.7 -m pip install --only-binary :all: numpy==1.21.4)
+(sudo python3.7 -m pip install --force --only-binary :all: scipy)
+
 
 -------------- evilsocket ------------------
-https://github.com/bettercap/bettercap/releases
-https://github.com/evilsocket/pwngrid/releases
+https://github.com/bettercap/bettercap/releases -> selfcompiled
+https://github.com/evilsocket/pwngrid/releases -> selfcompiled
 https://github.com/evilsocket/pwnagotchi.git
 
 sed -i s/==.*// requirements.txt
 sudo python3.7 -m pip install --only-binary :all: .
-sudo systemctl enable bettercap.service pwngrid-peer.service
+sudo systemctl enable bettercap.service pwngrid-peer.service pwnagotchi.service
 sudo chmod +x /usr/bin/bettercap-launcher
+sudo chmod +x /usr/bin/pwnagotchi-launcher
 sudo chmod +x /usr/bin/pwngrid
 sudo chmod +x /usr/bin/monstart
+sudo chmod +x /usr/bin/monstop
 
+-------------------- fixes ------------------------
+sudo apt mark hold firmware-brcm80211 libpcap0.8
+sudo apt install libpcap0.8=1.8.1-6+deb10u1
+https://old.kali.org/kali/pool/main/libp/libpcap/libpcap-dev_1.9.1-4_armhf.deb
+https://old.kali.org/kali/pool/main/libp/libpcap/libpcap0.8_1.9.1-4_armhf.deb
+sudo ln -s  /opt/vc/lib/libmmal_core.so /opt/vc/lib/libmmal_core.so.0
+sudo ln -s /opt/vc/lib/libmmal_util.so /opt/vc/lib/libmmal_util.so.0
+sudo ln -s /opt/vc/lib/libmmal_vc_client.so /opt/vc/lib/libmmal_vc_client.so.0
+sudo ln -s /opt/vc/lib/libbcm_host.so /opt/vc/lib/libbcm_host.so.0
+sudo ln -s /opt/vc/lib/libvcsm.so /opt/vc/lib/libvcsm.so.0
+sudo ln -s /opt/vc/lib/libvchiq_arm.so /opt/vc/lib/libvchiq_arm.so.0
+sudo ln -s /opt/vc/lib/libvcos.so /opt/vc/lib/libvcos.so.0
+sudo ldconfig
+sudo sed -i s/\/usr\/local\/bin\/pwnagotchi/LD_LIBRARY_PATH=\/opt\/vc\/lib \/usr\/local\/bin\/pwnagotchi/g /usr/bin/pwnagotchi-launcher 
+
+bettercap.timer
+[Unit]
+Description=Run bettercap delayed on boot
+
+[Timer]
+OnBootSec=15sec
+
+[Install]
+WantedBy=timers.target
+
+sudo systemctl disable bettercap.service
+sudo systemctl enable bettercap.timer
+
+------------------------------------------------------------
+tail -f /var/log/pwnagotchi.log
 
 ============== setup ================
 # https://pwnagotchi.ai/configuration/#known-problems
+
+---------------- bluetooth-pan ---------------
+https://raspberrypi.stackexchange.com/questions/29504/how-can-i-set-up-a-bluetooth-pan-connection-with-a-raspberry-pi-and-an-ipod
 
 ----------- ssh --------------
 pwnagotchi = pi@10.0.0.2
@@ -140,7 +123,6 @@ ssh-copy-id pwnagotchi
 --------- connection -------------
 linux_connection_share.sh -> upstream interface must be configured!
 echo "nameserver 8.8.8.8" | sudo tee -a /etc/resolv.conf
-
 
 
 ------ resolve issue of update removing kalipi-bootloader -----------
@@ -156,6 +138,32 @@ sudo apt-mark hold libraspberrypi0
 sudo apt full-upgrade
 
 ---------- fix/better wifi? -----------
+sudo systemctl disable dhcpd wpa_supplicant
+brcmfmac: dongle trap info: type 0xc
+
+/sbin/iwconfig wlan0 power off
+/sbin/iw dev wlan0 set power_save off
+
+https://github.com/RoganDawes/P4wnP1_aloa/blob/master/build_support/rpi0w-nexmon-p4wnp1-aloa.sh -> 481
+https://community.infineon.com/t5/Wi-Fi-Bluetooth-for-Linux/bd-p/WiFiBluetoothLinux
+https://github.com/raspberrypi/linux/issues/2453
+
+diffs:
+brcmfmac43430-sdio.AP6212.txt brcmfmac43430-sdio.clm_blob brcmfmac43430-sdio.Hampoo-D2D3_Vi8A1.txt brcmfmac43430-sdio.MUR1DX.txt brcmfmac43430-sdio.raspberrypi,3-model-b.txt brcmfmac43430-sdio.raspberrypi,model-zero-w.txt brcmfmac43430-sdio.sinovoip,bpi-m2-plus.txt brcmfmac43430-sdio.sinovoip,bpi-m2-ultra.txt brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt brcmfmac43430-sdio.sinovoip,bpi-m3.txt
+
+
+7.45.41.46 (r666254 CY)
+
+2017-08-07 00:37:47
+CLM DATA
+9.10.41
+1.29.4
+ClmImport: 1.36.3
+
+nexmon_ver: 2.2.2-195-g01e0-1
+
+
+
 sudo apt remove wpasupplicant
 sudo monstop
 sudo ifconfig wlan0 up
@@ -167,11 +175,15 @@ sudo ifconfig wlan0 down
 ---------- resolve issue of broken numpy --------
 https://www.piwheels.org/project/numpy/
 > use latest with wheels for current debian
-sudo pip3 install numpy==1.21.4
+sudo pip install numpy==1.21.4
 
------------ install kalipi-config (optional) ----------------
-sudo wget -O /usr/local/bin/kalipi-config https://raw.githubusercontent.com/Re4son/RPi-Tweaks/master/kalipi-config/kalipi-config
-sudo chmod 755 /usr/local/bin/kalipi-config
+---------------- requirements ------------------
+python3-pycryptodome python3-requests python3-yaml python3-scapy python3-scipy python3-tweepy python3-numpy python3-spidev python3-pil python3-flask python3-flask-cors python3-flaskext.wtf python3-dbus python3-toml python3-dateutil python3-websockets
+
+---------------- unstable ---------------
+sudo apt edit-sources
+> add "deb http://raspbian.raspberrypi.org/raspbian/ testing main contrib non-free rpi"
+sudo apt install python3-gast python3-smbus2
 
 ================ configuration ==========================
 https://github.com/evilsocket/pwnagotchi/blob/master/pwnagotchi/defaults.toml

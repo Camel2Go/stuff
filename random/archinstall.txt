@@ -80,6 +80,8 @@ pacman -S
 	pkgfile					# a pacman .files metadata explorer
 	seahorse				# GNOME application for managing PGP keys.
 	man-pages				# Linux man pages
+	system-config-printer	# A CUPS printer configuration tool and status applet
+
 
 
 
@@ -203,6 +205,8 @@ alias cat="bat"
 alias yeet="yay -Rns"
 alias serve="python3 -m http.server"
 eval $(thefuck --alias)
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
 
 # enable appindicators
 yay libappindicator-gtk3
@@ -236,6 +240,10 @@ mv ~/.config/gtk-4.0/Tokyonight-Dark-B.css ~/.config/gtk-4.0/gtk.css
 ~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk.css
 ~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk-dark.css
 > remove "-gtk-icon-source: transparent;"
+
+# change selected background color
+sed -i "s/selected_bg_color #d5d6db/selected_bg_color #1a1b26/g" ~/.config/gtk-4.0/gtk.css
+sed -i "s/selected_bg_color #d5d6db/selected_bg_color #1a1b26/g" ~/.themes/Tokyonight-Dark-B/gtk-*/gtk*.css 
 
 
 > https://github.com/stronk-dev/Tokyo-Night-Linux

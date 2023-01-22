@@ -1,0 +1,153 @@
+Nov  4 17:20:20 0x70776e kernel: [   16.488497] brcmfmac: F1 signature read @0x18000000=0x1541a9a6
+Nov  4 17:20:20 0x70776e kernel: [   16.489055] Registered IR keymap rc-cec
+Nov  4 17:20:20 0x70776e kernel: [   16.489344] rc rc0: vc4 as /devices/platform/soc/20902000.hdmi/rc/rc0
+Nov  4 17:20:20 0x70776e kernel: [   16.489651] input: vc4 as /devices/platform/soc/20902000.hdmi/rc/rc0/input1
+Nov  4 17:20:20 0x70776e kernel: [   16.640608] brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac43430-sdio for chip BCM43430/1
+Nov  4 17:20:20 0x70776e kernel: [   16.646167] brcmfmac mmc1:0001:1: Direct firmware load for brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.bin failed with error -2
+Nov  4 17:20:20 0x70776e kernel: [   16.648641] usbcore: registered new interface driver brcmfmac
+Nov  4 17:20:20 0x70776e kernel: [   16.649162] vc4-drm soc:gpu: bound 20400000.hvs (ops vc4_hvs_ops [vc4])
+Nov  4 17:20:20 0x70776e kernel: [   16.680545] Registered IR keymap rc-cec
+Nov  4 17:20:20 0x70776e kernel: [   16.680866] rc rc0: vc4 as /devices/platform/soc/20902000.hdmi/rc/rc0
+Nov  4 17:20:20 0x70776e kernel: [   16.681170] input: vc4 as /devices/platform/soc/20902000.hdmi/rc/rc0/input2
+Nov  4 17:20:20 0x70776e kernel: [   17.169751] brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac43430-sdio for chip BCM43430/1
+Nov  4 17:20:20 0x70776e kernel: [   17.170001] brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac43430-sdio for chip BCM43430/1
+Nov  4 17:20:20 0x70776e kernel: [   17.182000] ieee80211 phy0: brcmf_fw_crashed: Firmware has halted or crashed
+Nov  4 17:20:20 0x70776e kernel: [   17.237922] ------------[ cut here ]------------
+Nov  4 17:20:20 0x70776e kernel: [   17.237951] WARNING: CPU: 0 PID: 220 at kernel/workqueue.c:1510 __queue_work+0x37c/0x4a8
+Nov  4 17:20:20 0x70776e kernel: [   17.237998] Modules linked in: brcmfmac brcmutil vc4 cec cfg80211 drm_kms_helper rfkill raspberrypi_hwmon snd_soc_core snd_compress snd_pcm_dmaengine i2c_bcm2835 bcm2835_codec(C) snd_bcm2835(C) v4l2_mem2mem bcm2835_v4l2(C) bcm2835_isp(C) bcm2835_mmal_vchiq(C) videobuf2_vmalloc videobuf2_dma_contig snd_pcm videobuf2_memops videobuf2_v4l2 snd_timer videobuf2_common snd videodev mc vc_sm_cma(C) fixed uio_pdrv_genirq uio fuse drm drm_panel_orientation_quirks ip_tables x_tables ipv6
+Nov  4 17:20:20 0x70776e kernel: [   17.238195] CPU: 0 PID: 220 Comm: kworker/u3:1 Tainted: G         C        5.15.44-Re4son+ #1
+Nov  4 17:20:20 0x70776e kernel: [   17.238213] Hardware name: BCM2835
+Nov  4 17:20:20 0x70776e kernel: [   17.238224] Workqueue: brcmf_wq/mmc1:0001:1 brcmf_sdio_dataworker [brcmfmac]
+Nov  4 17:20:20 0x70776e kernel: [   17.238738] Backtrace: 
+Nov  4 17:20:20 0x70776e kernel: [   17.238749] [<c08ff90c>] (dump_backtrace) from [<c08ffb58>] (show_stack+0x20/0x24)
+Nov  4 17:20:20 0x70776e kernel: [   17.238806]  r7:00000009 r6:000005e6 r5:c004038c r4:c0b0c350
+Nov  4 17:20:20 0x70776e kernel: [   17.238814] [<c08ffb38>] (show_stack) from [<c0903498>] (dump_stack+0x28/0x30)
+Nov  4 17:20:20 0x70776e kernel: [   17.238842] [<c0903470>] (dump_stack) from [<c0024d5c>] (__warn+0xe8/0x154)
+Nov  4 17:20:20 0x70776e kernel: [   17.238877]  r5:c004038c r4:c0b0440c
+Nov  4 17:20:20 0x70776e kernel: [   17.238884] [<c0024c74>] (__warn) from [<c090011c>] (warn_slowpath_fmt+0x6c/0xe4)
+Nov  4 17:20:20 0x70776e kernel: [   17.238917]  r7:c004038c r6:000005e6 r5:c0b0440c r4:00000000
+Nov  4 17:20:20 0x70776e kernel: [   17.238924] [<c09000b4>] (warn_slowpath_fmt) from [<c004038c>] (__queue_work+0x37c/0x4a8)
+Nov  4 17:20:20 0x70776e kernel: [   17.238965]  r8:c413ecb0 r7:c1031000 r6:0000004c r5:dbf54400 r4:c413ecac
+Nov  4 17:20:20 0x70776e kernel: [   17.238972] [<c0040010>] (__queue_work) from [<c0040560>] (queue_work_on+0xa8/0xb0)
+Nov  4 17:20:19 0x70776e rsyslogd: [origin software="rsyslogd" swVersion="8.2102.0" x-pid="294" x-info="https://www.rsyslog.com"] start
+Nov  4 17:20:19 0x70776e systemd[1]: Starting WPA supplicant...
+Nov  4 17:20:19 0x70776e thd[319]: Found socket passed from systemd
+Nov  4 17:20:20 0x70776e avahi-daemon[265]: Server startup complete. Host name is 0x70776e.local. Local service cookie is 372303528.
+Nov  4 17:20:20 0x70776e polkitd[276]: started daemon version 0.105 using authority implementation `local' version `0.105'
+Nov  4 17:20:20 0x70776e systemd[1]: Started System Logging Service.
+Nov  4 17:20:20 0x70776e kernel: [   17.239006]  r10:c1208214 r9:c13c4b05 r8:c1031000 r7:00000001 r6:00000000 r5:c413ecac
+Nov  4 17:20:20 0x70776e kernel: [   17.239016]  r4:60000113
+Nov  4 17:20:20 0x70776e kernel: [   17.239021] [<c00404b8>] (queue_work_on) from [<bf7c6560>] (brcmf_fw_crashed+0x54/0x64 [brcmfmac])
+Nov  4 17:20:20 0x70776e kernel: [   17.239412]  r9:c13c4b05 r8:c1208210 r7:c1208210 r6:c4036380 r5:c413c4c0 r4:c18cac08
+Nov  4 17:20:20 0x70776e kernel: [   17.239420] [<bf7c650c>] (brcmf_fw_crashed [brcmfmac]) from [<bf7bee60>] (brcmf_sdio_dataworker+0x698/0x2664 [brcmfmac])
+Nov  4 17:20:20 0x70776e kernel: [   17.240129]  r5:c412d400 r4:00040012
+Nov  4 17:20:20 0x70776e kernel: [   17.240136] [<bf7be7c8>] (brcmf_sdio_dataworker [brcmfmac]) from [<c0040924>] (process_one_work+0x1d0/0x4a0)
+Nov  4 17:20:20 0x70776e kernel: [   17.240524]  r10:c1208214 r9:c13c4b05 r8:00000000 r7:c13c4b00 r6:00000060 r5:c4998060
+Nov  4 17:20:20 0x70776e kernel: [   17.240534]  r4:c1208210
+Nov  4 17:20:20 0x70776e kernel: [   17.240540] [<c0040754>] (process_one_work) from [<c0040c54>] (worker_thread+0x60/0x58c)
+Nov  4 17:20:20 0x70776e kernel: [   17.240575]  r10:c129aa00 r9:00000088 r8:c0cce920 r7:c129aa14 r6:c4998078 r5:c129aa00
+Nov  4 17:20:20 0x70776e kernel: [   17.240584]  r4:c4998060
+Nov  4 17:20:20 0x70776e kernel: [   17.240590] [<c0040bf4>] (worker_thread) from [<c0048834>] (kthread+0x138/0x160)
+Nov  4 17:20:20 0x70776e kernel: [   17.240626]  r10:c493301c r9:c12cbe90 r8:c50f4000 r7:c4998060 r6:c0040bf4 r5:c4933000
+Nov  4 17:20:20 0x70776e kernel: [   17.240635]  r4:c4898320
+Nov  4 17:20:20 0x70776e kernel: [   17.240641] [<c00486fc>] (kthread) from [<c00082f4>] (ret_from_fork+0x14/0x20)
+Nov  4 17:20:20 0x70776e kernel: [   17.240665] Exception stack(0xc50f5fb0 to 0xc50f5ff8)
+Nov  4 17:20:20 0x70776e kernel: [   17.240680] 5fa0:                                     00000000 00000000 00000000 00000000
+Nov  4 17:20:20 0x70776e kernel: [   17.240696] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+Nov  4 17:20:20 0x70776e kernel: [   17.240710] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+Nov  4 17:20:20 0x70776e kernel: [   17.240726]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c00486fc
+Nov  4 17:20:20 0x70776e kernel: [   17.240735]  r4:c4898320 r3:60000093
+Nov  4 17:20:20 0x70776e kernel: [   17.240742] ---[ end trace 49c79fe0d8f4aa7f ]---
+Nov  4 17:20:20 0x70776e kernel: [   19.683278] brcmfmac: brcmf_sdio_bus_rxctl: resumed on timeout
+Nov  4 17:20:20 0x70776e kernel: [   19.687043] brcmfmac: brcmf_sdio_checkdied: firmware trap in dongle
+Nov  4 17:20:20 0x70776e kernel: [   19.687280] brcmfmac: dongle trap info: type 0xc @ epc 0x0001f106
+Nov  4 17:20:20 0x70776e kernel: [   19.687280]   cpsr 0x0000000c spsr 0x01000010 sp 0x0006fb04
+Nov  4 17:20:20 0x70776e kernel: [   19.687280]   lr   0x0001f0fd pc   0x0001f106 offset 0x6fab0
+Nov  4 17:20:20 0x70776e systemd[1]: Started triggerhappy global hotkey daemon.
+Nov  4 17:20:20 0x70776e kernel: [   19.687280]   r0   0x0003a6a0 r1   0x00082540 r2 0x00000054 r3 0x00002095
+Nov  4 17:20:20 0x70776e kernel: [   19.687280]   r4   0x0006fb50 r5   0x000683f0 r6 0x00000001 r7 0x0000123d
+Nov  4 17:20:20 0x70776e kernel: [   19.687342] ieee80211 phy0: brcmf_c_process_clm_blob: clmload (4733 byte file) failed (-110)
+Nov  4 17:20:20 0x70776e kernel: [   20.439599] 8021q: 802.1Q VLAN Support v1.8
+Nov  4 17:20:20 0x70776e systemd[1]: e2scrub_reap.service: Succeeded.
+Nov  4 17:20:20 0x70776e systemd[1]: Finished Remove Stale Online ext4 Metadata Check Snapshots.
+Nov  4 17:20:20 0x70776e dphys-swapfile[269]: want /var/swap=100MByte, checking existing: keeping it
+Nov  4 17:20:20 0x70776e wpa_supplicant[325]: Successfully initialized wpa_supplicant
+Nov  4 17:20:20 0x70776e kernel: [   21.426676] uart-pl011 20201000.serial: no DMA platform data
+Nov  4 17:20:20 0x70776e kernel: [   21.521587] Adding 102396k swap on /var/swap.  Priority:-2 extents:1 across:102396k SSFS
+Nov  4 17:20:20 0x70776e systemd[1]: Finished dphys-swapfile - set up, mount/unmount, and delete a swap file.
+Nov  4 17:20:21 0x70776e systemd[1]: Started WPA supplicant.
+Nov  4 17:20:21 0x70776e systemd[1]: Started Avahi mDNS/DNS-SD Stack.
+Nov  4 17:20:21 0x70776e systemd[1]: Started Authorization Manager.
+Nov  4 17:20:21 0x70776e systemd[1]: Reached target Network.
+Nov  4 17:20:21 0x70776e systemd[1]: Starting Modem Manager...
+Nov  4 17:20:21 0x70776e kernel: [   22.243152] brcmfmac: brcmf_sdio_bus_rxctl: resumed on timeout
+Nov  4 17:20:21 0x70776e kernel: [   22.246867] brcmfmac: brcmf_sdio_checkdied: firmware trap in dongle
+Nov  4 17:20:21 0x70776e kernel: [   22.247104] brcmfmac: dongle trap info: type 0xc @ epc 0x0001f106
+Nov  4 17:20:21 0x70776e kernel: [   22.247104]   cpsr 0x0000000c spsr 0x01000010 sp 0x0006fb04
+Nov  4 17:20:21 0x70776e kernel: [   22.247104]   lr   0x0001f0fd pc   0x0001f106 offset 0x6fab0
+Nov  4 17:20:21 0x70776e kernel: [   22.247104]   r0   0x0003a6a0 r1   0x00082540 r2 0x00000054 r3 0x00002095
+Nov  4 17:20:21 0x70776e kernel: [   22.247104]   r4   0x0006fb50 r5   0x000683f0 r6 0x00000001 r7 0x0000123d
+Nov  4 17:20:21 0x70776e kernel: [   22.247168] ieee80211 phy0: brcmf_c_process_clm_blob: get clmload_status failed (-110)
+Nov  4 17:20:21 0x70776e kernel: [   22.247233] ieee80211 phy0: brcmf_c_preinit_dcmds: download CLM blob file failed, -5
+Nov  4 17:20:21 0x70776e kernel: [   22.247257] ieee80211 phy0: brcmf_bus_started: failed: -5
+Nov  4 17:20:21 0x70776e kernel: [   22.247287] ieee80211 phy0: brcmf_attach: dongle is not responding: err=-5
+Nov  4 17:20:21 0x70776e kernel: [   22.248012] brcmfmac: brcmf_sdio_firmware_callback: brcmf_attach failed
+Nov  4 17:20:21 0x70776e kernel: [   22.248437] brcmfmac: brcmf_sdio_checkdied: firmware trap in dongle
+Nov  4 17:20:21 0x70776e kernel: [   22.248654] brcmfmac: dongle trap info: type 0xc @ epc 0x0001f106
+Nov  4 17:20:21 0x70776e kernel: [   22.248654]   cpsr 0x0000000c spsr 0x01000010 sp 0x0006fb04
+Nov  4 17:20:21 0x70776e kernel: [   22.248654]   lr   0x0001f0fd pc   0x0001f106 offset 0x6fab0
+Nov  4 17:20:21 0x70776e kernel: [   22.248654]   r0   0x0003a6a0 r1   0x00082540 r2 0x00000054 r3 0x00002095
+Nov  4 17:20:21 0x70776e kernel: [   22.248654]   r4   0x0006fb50 r5   0x000683f0 r6 0x00000001 r7 0x0000123d
+Nov  4 17:20:22 0x70776e ModemManager[354]: <info>  ModemManager (version 1.14.12) starting in system bus...
+Nov  4 17:20:23 0x70776e systemd[1]: Started Modem Manager.
+Nov  4 17:20:24 0x70776e systemd[1]: Listening on Load/Save RF Kill Switch Status /dev/rfkill Watch.
+Nov  4 17:20:24 0x70776e kernel: [   25.143062] vc4-drm soc:gpu: bound 20400000.hvs (ops vc4_hvs_ops [vc4])
+Nov  4 17:20:24 0x70776e kernel: [   25.152216] Registered IR keymap rc-cec
+Nov  4 17:20:24 0x70776e kernel: [   25.152660] rc rc0: vc4 as /devices/platform/soc/20902000.hdmi/rc/rc0
+Nov  4 17:20:24 0x70776e kernel: [   25.152991] input: vc4 as /devices/platform/soc/20902000.hdmi/rc/rc0/input3
+Nov  4 17:20:24 0x70776e kernel: [   25.171996] vc4-drm soc:gpu: bound 20902000.hdmi (ops vc4_hdmi_ops [vc4])
+Nov  4 17:20:24 0x70776e kernel: [   25.172887] vc4-drm soc:gpu: bound 20004000.txp (ops vc4_txp_ops [vc4])
+Nov  4 17:20:24 0x70776e kernel: [   25.183563] vc4-drm soc:gpu: bound 20206000.pixelvalve (ops vc4_crtc_ops [vc4])
+Nov  4 17:20:24 0x70776e kernel: [   25.184337] vc4-drm soc:gpu: bound 20207000.pixelvalve (ops vc4_crtc_ops [vc4])
+Nov  4 17:20:24 0x70776e kernel: [   25.185003] vc4-drm soc:gpu: bound 20807000.pixelvalve (ops vc4_crtc_ops [vc4])
+Nov  4 17:20:24 0x70776e kernel: [   25.185544] vc4-drm soc:gpu: bound 20c00000.v3d (ops vc4_v3d_ops [vc4])
+Nov  4 17:20:24 0x70776e kernel: [   25.209547] [drm] Initialized vc4 0.0.0 20140616 for soc:gpu on minor 0
+Nov  4 17:20:24 0x70776e kernel: [   25.209998] vc4-drm soc:gpu: [drm] Cannot find any crtc or sizes
+Nov  4 17:20:25 0x70776e systemd-udevd[145]: regulatory.0: Process '/lib/crda/crda' failed with exit code 249.
+Nov  4 17:20:25 0x70776e systemd-udevd[145]: regulatory.0: Process '/lib/crda/crda' failed with exit code 249.
+Nov  4 17:20:25 0x70776e kernel: [   26.293905] Bluetooth: Core ver 2.22
+Nov  4 17:20:25 0x70776e kernel: [   26.294107] NET: Registered PF_BLUETOOTH protocol family
+Nov  4 17:20:25 0x70776e kernel: [   26.294126] Bluetooth: HCI device and connection manager initialized
+Nov  4 17:20:25 0x70776e kernel: [   26.294164] Bluetooth: HCI socket layer initialized
+Nov  4 17:20:25 0x70776e kernel: [   26.294186] Bluetooth: L2CAP socket layer initialized
+Nov  4 17:20:25 0x70776e kernel: [   26.294241] Bluetooth: SCO socket layer initialized
+Nov  4 17:20:25 0x70776e kernel: [   26.312800] Bluetooth: HCI UART driver ver 2.3
+Nov  4 17:20:25 0x70776e kernel: [   26.312846] Bluetooth: HCI UART protocol H4 registered
+Nov  4 17:20:25 0x70776e kernel: [   26.312987] Bluetooth: HCI UART protocol Three-wire (H5) registered
+Nov  4 17:20:25 0x70776e kernel: [   26.321454] Bluetooth: HCI UART protocol Broadcom registered
+Nov  4 17:20:25 0x70776e btuart[344]: bcm43xx_init
+Nov  4 17:20:25 0x70776e btuart[344]: Flash firmware /lib/firmware/brcm/BCM43430A1.hcd
+Nov  4 17:20:25 0x70776e btuart[344]: Set BDADDR UART: b8:27:eb:5b:de:07
+Nov  4 17:20:25 0x70776e btuart[344]: Set Controller UART speed to 3000000 bit/s
+Nov  4 17:20:25 0x70776e btuart[344]: Device setup complete
+Nov  4 17:20:25 0x70776e systemd[1]: Started Configure Bluetooth Modems connected by UART.
+Nov  4 17:20:25 0x70776e systemd[1]: Starting Load/Save RF Kill Switch Status...
+Nov  4 17:20:25 0x70776e systemd-udevd[149]: event0: Process '/usr/sbin/th-cmd --socket /var/run/thd.socket --passfd --udev' failed with exit code 1.
+Nov  4 17:20:25 0x70776e systemd[1]: Started Load/Save RF Kill Switch Status.
+Nov  4 17:20:25 0x70776e systemd[1]: Created slice system-bthelper.slice.
+Nov  4 17:20:25 0x70776e systemd[1]: Starting Raspberry Pi bluetooth helper...
+Nov  4 17:20:26 0x70776e bthelper[407]: Raspberry Pi BDADDR already set
+Nov  4 17:20:26 0x70776e systemd[1]: Finished Raspberry Pi bluetooth helper.
+Nov  4 17:20:26 0x70776e systemd[1]: Starting Bluetooth service...
+Nov  4 17:20:26 0x70776e bluetoothd[417]: Bluetooth daemon 5.55
+Nov  4 17:20:26 0x70776e systemd[1]: Started Bluetooth service.
+Nov  4 17:20:26 0x70776e systemd[1]: Reached target Bluetooth.
+Nov  4 17:20:26 0x70776e bluetoothd[417]: Starting SDP server
+Nov  4 17:20:26 0x70776e kernel: [   27.467475] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+Nov  4 17:20:26 0x70776e kernel: [   27.467518] Bluetooth: BNEP filters: protocol multicast
+Nov  4 17:20:26 0x70776e kernel: [   27.467553] Bluetooth: BNEP socket layer initialized
+Nov  4 17:20:26 0x70776e bluetoothd[417]: Bluetooth management interface 1.21 initialized
+Nov  4 17:20:30 0x70776e systemd[1]: systemd-rfkill.service: Succeeded.
+Nov  4 17:20:31 0x70776e bthelper[432]: Changing power off succeeded
+Nov  4 17:20:31 0x70776e bthelper[415]: Changing power on succeeded
+Nov  4 17:20:31 0x70776e bthelper[415]: [#001#033[0;93m#002CHG#001#033[0m#002] Controller B8:27:EB:5B:DE:07 Powered: yes
