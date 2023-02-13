@@ -115,6 +115,13 @@ tail -f /var/log/pwnagotchi.log
 
 ---------------- bluetooth-pan ---------------
 https://raspberrypi.stackexchange.com/questions/29504/how-can-i-set-up-a-bluetooth-pan-connection-with-a-raspberry-pi-and-an-ipod
+udevadm monitor --udev --environment
+-> UDEV  [1132.168544] add      /devices/virtual/input/input11/eventX (input)
+-> DEVNAME=/dev/input/eventX
+sudo udevadm info -a /dev/input/eventX
+-> ATTRS{name}=="Camelphone (AVRCP)"
+sudo nano /etc/udev/rules.d/50-btpan.rules
+ACTION=="add" SUBSYSTEM=="input" ATTRS{name}=="Camelphone (AVRCP)" RUN+="/usr/bin/bt-network -c 60:e3:ac:0d:f1:33 nap"
 
 ----------- ssh --------------
 pwnagotchi = pi@10.0.0.2
