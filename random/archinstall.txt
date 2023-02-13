@@ -81,9 +81,15 @@ pacman -S
 	seahorse				# GNOME application for managing PGP keys.
 	man-pages				# Linux man pages
 	system-config-printer	# A CUPS printer configuration tool and status applet
-
-
-
+	gst-libav				# Multimedia graph framework - libav plugin
+	wireplumber 			# Session / policy manager implementation for PipeWire
+	hdparm					# A shell utility for manipulating Linux IDE drive/driver parameters
+	wl-clipboard			# Command-line copy/paste utilities for Wayland
+	ffmpeg 					# Complete solution to record, convert and stream audio and video
+	gst-plugins-ugly		# Multimedia graph framework - ugly plugins
+	gst-plugins-good		# Multimedia graph framework - good plugins
+	gst-plugins-base		# Multimedia graph framework - base
+	gst-plugins-bad			# Multimedia graph framework - bad
 
 
 	
@@ -146,6 +152,9 @@ reboot
 
 
 # ========= customization ===============
+
+# power off windows hard disk after boot
+https://wiki.archlinux.org/title/hdparm#Putting_a_drive_to_sleep_directly_after_boot
 
 # wallpaper
 > https://repository-images.githubusercontent.com/410301907/3126aefc-c58a-410b-9a85-5fed8ff0000d
@@ -228,21 +237,21 @@ mv ~/.config/gtk-4.0/Tokyonight-Dark-B.css ~/.config/gtk-4.0/gtk.css
 ~/.themes/Tokyonight-Dark-B/gnome-shell/gnome-shell.css
 2285:
 #panel {
-    > remove margin
-    border: 0px solid #414868;
-    border-bottom-width: 2px;
+	> remove margin
+	border: 0px solid #414868;
+	border-bottom-width: 2px;
 }
 2599:
 .popup-menu .popup-menu-content {
-    margin: 4px 0px 12px;
+	margin: 4px 0px 12px;
 }
 ~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk.css
 ~/.themes/Tokyonight-Dark-B/gtk-3.0/gtk-dark.css
 > remove "-gtk-icon-source: transparent;"
 
 # change selected background color
-sed -i "s/selected_bg_color #d5d6db/selected_bg_color #1a1b26/g" ~/.config/gtk-4.0/gtk.css
-sed -i "s/selected_bg_color #d5d6db/selected_bg_color #1a1b26/g" ~/.themes/Tokyonight-Dark-B/gtk-*/gtk*.css 
+# sed -i "s/theme_unfocused_selected_bg_color #d5d6db/theme_unfocused_selected_bg_color #1a1b26/g" ~/.config/gtk-4.0/gtk.css
+sed -i "s/theme_unfocused_selected_bg_color #d5d6db/theme_unfocused_selected_bg_color #1a1b26/g" ~/.themes/Tokyonight-Dark-B/gtk-*/gtk*.css 
 
 
 > https://github.com/stronk-dev/Tokyo-Night-Linux
@@ -254,15 +263,16 @@ curl -o ~/.config/spicetify/Themes/tokionight/user.css https://github.com/stronk
 
 # extensions
 yay gnome-browser-connector
-> https://extensions.gnome.org/extension/906/sound-output-device-chooser/
-> https://extensions.gnome.org/extension/779/clipboard-indicator/
-> https://extensions.gnome.org/extension/1460/vitals/
-> https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
-> https://extensions.gnome.org/extension/905/refresh-wifi-connections/
-> https://extensions.gnome.org/extension/1010/archlinux-updates-indicator/
+yay gnome-shell-extension-sound-output-device-chooser
+yay gnome-shell-extension-quick-settings-tweaks-git
+yay gnome-shell-extension-appindicator
+yay gnome-shell-extension-vitals
+yay gnome-shell-extension-clipboard-indicator
+yay gnome-shell-extension-arch-update
+yay gnome-shell-extension-bluetooth-quick-connect
+yay gnome-shell-extension-refresh-wifi
+yay gnome-shell-extension-timepp
 > https://extensions.gnome.org/extension/2917/bring-out-submenu-of-power-offlogout-button/
-> https://extensions.gnome.org/extension/1238/time/
-> https://extensions.gnome.org/extension/615/appindicator-support/
 
 gnome-extensions-app
 > enable "Launch new instance"
@@ -417,14 +427,14 @@ yay -S swtpm
 swtpm_setup --create-config-files skip-if-exist
 virsh edit win10
 <os>
-    <type arch="x86_64" machine="pc-q35-7.1">hvm</type>
+	<type arch="x86_64" machine="pc-q35-7.1">hvm</type>
 	<loader readonly="yes" type="pflash">/usr/share/edk2-ovmf/x64/OVMF_CODE.secboot.fd</loader>
 	...
 </os>
 <devices>
 	<tpm model="tpm-crb">
-    	<backend type="emulator" version="2.0"/>
-    </tpm>
+		<backend type="emulator" version="2.0"/>
+	</tpm>
 	...
 </devices>
 

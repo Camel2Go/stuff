@@ -18,12 +18,15 @@ ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 country=DE
 update_config=1
 <>
-wpa_passphrase "Neuland" >> wpa_supplicant.conf
+wpa_passphrase "weisichnicht" >> wpa_supplicant.conf
 nano wpa_supplicant.conf
 
-------------------  kalipi ----------------------
-# echo "deb http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee /etc/apt/sources.list.d/kali.list
-# sudo apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-key ED444FF07D8D0BF6
+------------------ apt ----------------------
+echo "deb http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee /etc/apt/sources.list.d/kali.list
+sudo apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-key ED444FF07D8D0BF6
+sudo mv /etc/apt/sources.list.d/kali.list /etc/apt/sources.list.d/kali.list.bak && sudo apt update
+sudo mv /etc/apt/sources.list.d/kali.list.bak /etc/apt/sources.list.d/kali.list && sudo apt update
+-> only armel or armhf-armv7, no armhf-armv6
 
 echo "deb http://http.re4son-kernel.com/re4son/ kali-pi main" | sudo tee /etc/apt/sources.list.d/re4son.list
 sudo apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-key 11764EE8AC24832F
@@ -38,63 +41,89 @@ Pin-Priority: 1001
 sudo apt update && sudo apt upgrade -y
 sudo apt autoremove
 sudo apt remove vcdbg
-sudo apt install kalipi-kernel kalipi-bootloader kalipi-re4son-firmware kalipi-kernel-headers libraspberrypi0 libraspberrypi-dev libraspberrypi-doc libraspberrypi-bin 
-(sudo rm /lib/firmware/brcm/brcmfmac43430-sdio.clm_blob)
-
------------ install kalipi-config (optional) ----------------
+sudo apt install kalipi-kernel kalipi-bootloader kalipi-re4son-firmware kalipi-kernel-headers libraspberrypi0 libraspberrypi-dev libraspberrypi-doc libraspberrypi-bin
+(sudo mv /lib/firmware/brcm/brcmfmac43430-sdio.clm_blob /lib/firmware/brcm/brcmfmac43430-sdio.clm_blob.bak)
 sudo wget -O /usr/local/bin/kalipi-config https://raw.githubusercontent.com/Re4son/RPi-Tweaks/master/kalipi-config/kalipi-config
 sudo chmod 755 /usr/local/bin/kalipi-config
 
 ------------------ misc ----------------------------
-sudo apt install git plocate net-tools libatlas-base-dev whiptail parted lua5.1 alsa-utils psmisc libnetfilter-queue1 libpcap0.8 libusb-1.0-0 libopenjp2-7 libavcodec58 libavformat58 libswscale5 libgtk-3-0
+sudo apt install git plocate net-tools libatlas-base-dev whiptail parted lua5.1 alsa-utils psmisc libnetfilter-queue1 libpcap0.8 libusb-1.0-0 libopenjp2-7 libavcodec58 libavformat58 libswscale5 libgtk-3-0 libopenmpi3 openmpi-common openmpi-bin
 (libhdfs3) libhdf3-dev libhdf5-dev
+openocd aircrack-ng bluez-tools pulseaudio-module-bluetooth
 sudo updatedb 
 
 ----------------- python3.7 --------------------
 https://packages.debian.org/search?keywords=python3.7
 echo "deb http://raspbian.raspberrypi.org/raspbian/ buster main" | sudo tee /etc/apt/sources.list.d/buster.list
-sudo apt install python3.7 python3-pip python3-distutils/oldstable
+sudo apt update
+sudo apt install python3.7 python3-pip python3-distutils/oldstable python3-lib2to3/oldstable
 
 -------------------- tensorflow ----------------------
 https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.4.0/tensorflow-2.4.0-cp37-none-linux_armv6l.whl
 https://storage.googleapis.com/tensorflow/raspberrypi/tensorflow-2.3.0-cp35-none-linux_armv6l.whl
 https://piwheels.org/simple/tensorflow/tensorflow-1.13.1-cp37-none-linux_armv6l.whl#sha256=3aad2c162168a62adae30e226bcddfef74e5db1ca98bec1383958fb580e67123
 https://piwheels.org/simple/tensorflow/tensorflow-1.14.0-cp37-none-linux_armv6l.whl#sha256=9abd359bd907fa9602465f83ae5518d3042fc8096a597aa879176dda627c489c
-sudo python3.7 -m pip install --only-binary :all: tensorflow==1.13.1
+(sudo python3.7 -m pip install --only-binary :all: tensorflow==1.13.1)
 (sudo python3.7 -m pip install --only-binary :all: numpy==1.21.4)
 (sudo python3.7 -m pip install --force --only-binary :all: scipy)
 
 
--------------- evilsocket ------------------
+-------------- pwnagotchi ------------------
 https://github.com/bettercap/bettercap/releases -> selfcompiled
 https://github.com/evilsocket/pwngrid/releases -> selfcompiled
 https://github.com/evilsocket/pwnagotchi.git
 
-sed -i s/==.*// requirements.txt
-sudo python3.7 -m pip install --only-binary :all: .
-sudo systemctl enable bettercap.service pwngrid-peer.service pwnagotchi.service
+(sed -i s/==.*// requirements.txt)
+sudo python3.7 -m pip install --only-binary :all: -r requirements.txt
+sudo python3.7 -m pip install .
+sudo python3.7 -m pip install flask flask-wtf RPi.GPIO werkzeug==2.0.0 mpi4py --upgrade
+sed -i s/python3/python3.7/g /usr/local/bin/pwnagotchi
+sudo nano /etc/systemd/system/pwnagotchi.service -> Environment="LD_LIBRARY_PATH=/opt/vc/lib"
+for file in /opt/vc/lib/*.so; do sudo mv "$file" "$file.0"; done
+sudo ldconfig
+sudo apt-mark hold firmware-brcm80211 libpcap0.8 libpython3-stdlib python3 python3-distutils python3-lib2to3 python3-minimal
+sudo apt install libpcap0.8=1.8.1-6+deb10u1
 sudo chmod +x /usr/bin/bettercap-launcher
 sudo chmod +x /usr/bin/pwnagotchi-launcher
 sudo chmod +x /usr/bin/pwngrid
+sudo chmod +x /usr/bin/bettercap
 sudo chmod +x /usr/bin/monstart
 sudo chmod +x /usr/bin/monstop
+sudo systemctl enable bettercap.service pwngrid-peer.service pwnagotchi.service
 
--------------------- fixes ------------------------
-sudo apt mark hold firmware-brcm80211 libpcap0.8
-sudo apt install libpcap0.8=1.8.1-6+deb10u1
+
+============== setup ================
+# https://pwnagotchi.ai/configuration/#known-problems
+
+---------------- bluetooth-pan ---------------
+sudo apt install pulseaudio-module-bluetooth
+/usr/lib/systemd/system/bluetooth.service -> ExecStart=/usr/libexec/bluetooth/bluetoothd --noplugin=sap
+https://raspberrypi.stackexchange.com/questions/29504/how-can-i-set-up-a-bluetooth-pan-connection-with-a-raspberry-pi-and-an-ipod
+-> bt-agent
+
+udevadm monitor --udev --environment
+-> UDEV  [1132.168544] add      /devices/virtual/input/input11/eventX (input)
+-> DEVNAME=/dev/input/eventX
+sudo udevadm info -a /dev/input/eventX
+-> ATTRS{name}=="Camelphone (AVRCP)"
+sudo nano /etc/udev/rules.d/50-btpan.rules
+ACTION=="add" SUBSYSTEM=="input" ATTRS{name}=="Camelphone (AVRCP)" RUN+="/usr/bin/bt-network -c 60:e3:ac:0d:f1:33 nap"
+
+http://bluetooth-pentest.narod.ru/software/bluetooth_class_of_device-service_generator.html
+
+--------- connection -------------
+linux_connection_share.sh -> upstream interface must be configured!
+echo "nameserver 8.8.8.8" | sudo tee -a /etc/resolv.conf
+
+------------------------------------------------------------
+tail -f /var/log/pwnagotchi.log
+
+==================== fixes ==========================
+(sudo rm -r /usr/lib/python3.7/distutils && sudo ln -s /usr/lib/python3.9/distutils /usr/lib/python3.7/distutils)
 https://old.kali.org/kali/pool/main/libp/libpcap/libpcap-dev_1.9.1-4_armhf.deb
 https://old.kali.org/kali/pool/main/libp/libpcap/libpcap0.8_1.9.1-4_armhf.deb
-sudo ln -s  /opt/vc/lib/libmmal_core.so /opt/vc/lib/libmmal_core.so.0
-sudo ln -s /opt/vc/lib/libmmal_util.so /opt/vc/lib/libmmal_util.so.0
-sudo ln -s /opt/vc/lib/libmmal_vc_client.so /opt/vc/lib/libmmal_vc_client.so.0
-sudo ln -s /opt/vc/lib/libbcm_host.so /opt/vc/lib/libbcm_host.so.0
-sudo ln -s /opt/vc/lib/libvcsm.so /opt/vc/lib/libvcsm.so.0
-sudo ln -s /opt/vc/lib/libvchiq_arm.so /opt/vc/lib/libvchiq_arm.so.0
-sudo ln -s /opt/vc/lib/libvcos.so /opt/vc/lib/libvcos.so.0
-sudo ldconfig
-sudo sed -i s/\/usr\/local\/bin\/pwnagotchi/LD_LIBRARY_PATH=\/opt\/vc\/lib \/usr\/local\/bin\/pwnagotchi/g /usr/bin/pwnagotchi-launcher 
 
-bettercap.timer
+/etc/systemd/system/bettercap.timer
 [Unit]
 Description=Run bettercap delayed on boot
 
@@ -106,31 +135,6 @@ WantedBy=timers.target
 
 sudo systemctl disable bettercap.service
 sudo systemctl enable bettercap.timer
-
-------------------------------------------------------------
-tail -f /var/log/pwnagotchi.log
-
-============== setup ================
-# https://pwnagotchi.ai/configuration/#known-problems
-
----------------- bluetooth-pan ---------------
-https://raspberrypi.stackexchange.com/questions/29504/how-can-i-set-up-a-bluetooth-pan-connection-with-a-raspberry-pi-and-an-ipod
-udevadm monitor --udev --environment
--> UDEV  [1132.168544] add      /devices/virtual/input/input11/eventX (input)
--> DEVNAME=/dev/input/eventX
-sudo udevadm info -a /dev/input/eventX
--> ATTRS{name}=="Camelphone (AVRCP)"
-sudo nano /etc/udev/rules.d/50-btpan.rules
-ACTION=="add" SUBSYSTEM=="input" ATTRS{name}=="Camelphone (AVRCP)" RUN+="/usr/bin/bt-network -c 60:e3:ac:0d:f1:33 nap"
-
------------ ssh --------------
-pwnagotchi = pi@10.0.0.2
-ssh-copy-id pwnagotchi
-
---------- connection -------------
-linux_connection_share.sh -> upstream interface must be configured!
-echo "nameserver 8.8.8.8" | sudo tee -a /etc/resolv.conf
-
 
 ------ resolve issue of update removing kalipi-bootloader -----------
 sudo apt update
